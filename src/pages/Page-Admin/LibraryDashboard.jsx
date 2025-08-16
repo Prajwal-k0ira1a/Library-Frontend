@@ -1,28 +1,28 @@
-import React, { useState } from 'react';
-import Navigation from './Navigation.jsx';
-import DashboardHome from './HomeDashboard.jsx';
-import UsersManagement from './UsersManagement.jsx';
-import BorrowedBooks from './BorrowedBooks.jsx';
-import Returns from './Returns.jsx';
-import BooksManagement from './BooksManagement.jsx';
-import SettingsPanel from './SettingsPanel.jsx';
+import React, { useState } from "react";
+import Navigation from "./Navigation.jsx";
+import DashboardHome from "./HomeDashboard.jsx";
+import UsersManagement from "./UsersManagement.jsx";
+import BorrowedBooks from "./BorrowedBooks.jsx";
+import Returns from "./Returns.jsx";
+import BooksManagement from "./BooksManagement.jsx";
+import SettingsPanel from "./SettingsPanel.jsx";
 
 const LibraryDashboard = () => {
-  const [activeTab, setActiveTab] = useState('home');
+  const [activeTab, setActiveTab] = useState("home");
 
   const renderContent = () => {
     switch (activeTab) {
-      case 'home':
+      case "home":
         return <DashboardHome />;
-      case 'users':
+      case "users":
         return <UsersManagement />;
-      case 'books':
+      case "books":
         return <BooksManagement />;
-      case 'borrowed':
+      case "borrowed":
         return <BorrowedBooks />;
-      case 'returns':
+      case "returns":
         return <Returns />;
-      case 'settings':
+      case "settings":
         return <SettingsPanel />;
       default:
         return <DashboardHome />;
@@ -30,32 +30,29 @@ const LibraryDashboard = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex w-full h-screen bg-gray-50">
       <Navigation activeTab={activeTab} setActiveTab={setActiveTab} />
-      
-      <div className="flex-1 overflow-auto">
-        <header className="bg-white shadow-sm border-b border-gray-200 px-6 py-4">
+
+      <div className="flex-1 overflow-auto w-[100%] mx-auto">
+        {" "}
+    
+        <header className="bg-white shadow-sm border-b border-gray-200 px-4 py-2">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-semibold text-gray-900">
               Library Management System
             </h2>
             <div className="flex items-center space-x-4">
-              <div className="text-sm text-gray-500">
-                Welcome back, Admin
-              </div>
+              <div className="text-sm text-gray-500">Welcome back, Admin</div>
               <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
                 <span className="text-white text-sm font-medium">A</span>
               </div>
             </div>
           </div>
         </header>
-
-        <main className="p-6">
-          {renderContent()}
-        
-        </main>
-        </div>
-        </div>
+        <main className="p-4">{renderContent()}</main>
+      </div>
+    </div>
   );
-}
+};
+
 export default LibraryDashboard;
