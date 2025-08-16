@@ -4,10 +4,12 @@ import COVER_IMG from "../assets/image.jpg";
 import logo from "../assets/images.png";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { Eye, EyeOff } from "lucide-react"; 
 
 const Login = () => {
+  const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState(""); 
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -19,38 +21,39 @@ const Login = () => {
         password,
       });
 
-      const { token, employee } = res.data.data;
-
+      const { data } = res;
+      const { user, token } = data;
       localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(employee));
-      console.log("Employee data:", employee);
+      localStorage.setItem("user", JSON.stringify(user));
+
+      // Log the user data and token
+      console.log("User data:", user);
       console.log("Token:", token);
+
       // Navigate based on role
-      if (employee.role === "admin" || employee.role === "manager") {
-        toast.success("Login successful 🎉", {
+      if (user.role === "librarian") {
+        toast.success("Login successful ", {
           position: "top-right",
           autoClose: 2000,
           hideProgressBar: false,
         });
-        // After login success:
-        navigate("/admin-dashboard");
-        localStorage.setItem("token", res.data.data.token);
-      } else if (employee.role === "manager") {
-        navigate("/");
-      } else if (employee.role === "student") {
+        navigate("/admin/*");
+      } else if (user.role === "student") {
         navigate("/");
       } else {
         setError("Unknown role. Contact admin.");
       }
 
-      console.log("Login successful:", employee);
+      console.log("Login successful:", user);
     } catch (error) {
-      toast.error("Unknown role. Contact admin.", {
-        position: "top-right",
-        
-        autoClose: 5000,
-        hideProgressBar: false,
-      });
+      toast.error(
+        error.response?.data?.message || "Login failed. Please try again.",
+        {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+        }
+      );
       setError(
         error.response?.data?.message || "Login failed. Please try again."
       );
@@ -64,10 +67,10 @@ const Login = () => {
       <div className="relative w-full md:w-1/2 h-64 md:h-full flex flex-col">
         <div className="absolute top-[20%] left-[10%] flex flex-col z-10">
           <h1 className="text-3xl md:text-4xl text-white font-bold my-4 drop-shadow-lg">
-            Employee Management
+            user Management
           </h1>
           <p className="text-lg md:text-xl text-white font-normal drop-shadow-lg">
-            Manage your employees efficiently and securely.
+            Manage your users efficiently and securely.
           </p>
         </div>
         <img
@@ -100,14 +103,24 @@ const Login = () => {
               onChange={(e) => setEmail(e.target.value)}
               required
             />
-            <input
-              type="password"
-              className="w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none focus:outline-none"
-              placeholder="Enter your password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                className="w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none focus:outline-none pr-10"
+                placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((prev) => !prev)}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 hover:text-blue-600 focus:outline-none"
+                tabIndex={-1}
+              >
+                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+              </button>
+            </div>
             <div className="w-full flex flex-col md:flex-row items-center justify-between gap-2 md:gap-0">
               <div className="flex items-center">
                 <input type="checkbox" className="w-4 h-4 mr-2" />
