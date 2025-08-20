@@ -1,87 +1,58 @@
+import axios from "axios";
+
 const API_BASE = "http://localhost:5100/api/books";
 
-// ✅ Create Book
+//Create Book
 export async function createBook(bookData) {
   try {
-    const response = await fetch(
-      `${API_BASE}/create`,
-      {
-        method: "POST",
-        credentials: "include", // 🔑 send cookies
-        body: bookData, // FormData object (browser will set headers)
-      },
-      { withCredentials: true }
-    );
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`HTTP ${response.status}: ${errorText}`);
-    }
-
-    return await response.json();
+    const response = await axios.post(`${API_BASE}/create`, bookData, {
+      withCredentials: true, // 🔑 send cookies
+    });
+    return response.data;
   } catch (error) {
-    console.error("Create book error:", error);
+    console.error("Create book error:", error.response?.data || error.message);
     throw error;
   }
 }
 
-// ✅ Update Book
+//Update Book
 export async function updateBook(bookId, bookData) {
   try {
-    const response = await fetch(`${API_BASE}/update/${bookId}`, {
-      method: "PUT",
-      credentials: "include", // 🔑
-      body: bookData,
+    const response = await axios.put(`${API_BASE}/update/${bookId}`, bookData, {
+      withCredentials: true, // 🔑
     });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`HTTP ${response.status}: ${errorText}`);
-    }
-
-    return await response.json();
+    return response.data;
   } catch (error) {
-    console.error("Update book error:", error);
+    console.error("Update book error:", error.response?.data || error.message);
     throw error;
   }
 }
 
-// ✅ Delete Book
+//Delete Book
 export async function deleteBook(bookId) {
   try {
-    const response = await fetch(`${API_BASE}/delete/${bookId}`, {
-      method: "DELETE",
-      credentials: "include", // 🔑
+    const response = await axios.delete(`${API_BASE}/delete/${bookId}`, {
+      withCredentials: true, // 🔑
     });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`HTTP ${response.status}: ${errorText}`);
-    }
-
-    return await response.json();
+    return response.data;
   } catch (error) {
-    console.error("Delete book error:", error);
+    console.error("Delete book error:", error.response?.data || error.message);
     throw error;
   }
 }
 
-// ✅ Get All Books
+//Get All Books
 export async function getAllBooks() {
   try {
-    const response = await fetch(`${API_BASE}/getAll`, {
-      method: "GET",
-      credentials: "include", // 🔑
+    const response = await axios.get(`${API_BASE}/getAll`, {
+      withCredentials: true, // 🔑
     });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`HTTP ${response.status}: ${errorText}`);
-    }
-
-    return await response.json();
+    return response.data;
   } catch (error) {
-    console.error("Get all books error:", error);
+    console.error(
+      "Get all books error:",
+      error.response?.data || error.message
+    );
     throw error;
   }
 }

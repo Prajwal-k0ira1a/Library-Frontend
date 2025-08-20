@@ -6,10 +6,17 @@ import BorrowedBooks from "./BorrowedBooks.jsx";
 import Returns from "./Returns.jsx";
 import BooksManagement from "./BooksManagement.jsx";
 import SettingsPanel from "./SettingsPanel.jsx";
-
+import { useNavigate } from "react-router-dom";
 const LibraryDashboard = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("home");
 
+  
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    navigate("/");
+  };
   const renderContent = () => {
     switch (activeTab) {
       case "home":
@@ -35,7 +42,6 @@ const LibraryDashboard = () => {
 
       <div className="flex-1 overflow-auto w-[100%] mx-auto">
         {" "}
-    
         <header className="bg-white shadow-sm border-b border-gray-200 px-4 py-2">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-semibold text-gray-900">
@@ -46,6 +52,12 @@ const LibraryDashboard = () => {
               <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
                 <span className="text-white text-sm font-medium">A</span>
               </div>
+              <button
+                className="bg-red-500 hover:bg-red-600 px-4 py-1 rounded"
+                onClick={handleLogout}
+              >
+                Logout
+              </button>
             </div>
           </div>
         </header>
