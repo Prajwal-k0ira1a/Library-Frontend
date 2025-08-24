@@ -42,8 +42,8 @@ const Login = () => {
           hideProgressBar: false,
         });
         navigate("/admin/*");
-      } else if (user.role === "student") {
-        navigate("/");
+      } else if (user.role === "borrower") {
+        navigate("/user/*");
       } else {
         setError("Unknown role. Contact admin.");
       }

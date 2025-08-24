@@ -11,7 +11,6 @@ const LibraryDashboard = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("home");
 
-  
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
@@ -40,9 +39,10 @@ const LibraryDashboard = () => {
     <div className="flex w-full h-screen bg-gray-50">
       <Navigation activeTab={activeTab} setActiveTab={setActiveTab} />
 
-      <div className="flex-1 overflow-auto w-[100%] mx-auto">
+      <div className="flex-1 overflow-auto max-w-[1800px] mx-auto">
         {" "}
-        <header className="bg-white shadow-sm border-b border-gray-200 px-4 py-2">
+        {/* Removed w-[100%] mx-auto for full width */}{" "}
+        <header className="bg-[whitesmoke] shadow-sm border-b border-gray-200 px-4 py-2">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-semibold text-gray-900">
               Library Management System
@@ -61,7 +61,7 @@ const LibraryDashboard = () => {
             </div>
           </div>
         </header>
-        <main className="p-4">{renderContent()}</main>
+        <main className="p-2">{renderContent()}</main>
       </div>
     </div>
   );

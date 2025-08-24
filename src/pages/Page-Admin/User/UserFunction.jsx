@@ -47,7 +47,6 @@ const UserDashboard = () => {
       // Add the new user to the current users list
       setUsers((prevUsers) => [...prevUsers, newUser]);
 
-      // Reset form data
       setFormData({
         name: "",
         email: "",
