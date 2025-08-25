@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navigation from "./Navigation.jsx";
 import DashboardHome from "./HomeDashboard.jsx";
 import UsersManagement from "./UsersManagement.jsx";
@@ -10,6 +10,16 @@ import { useNavigate } from "react-router-dom";
 const LibraryDashboard = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("home");
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem("user"));
+    if (!userData) {
+      navigate("/");
+    } else {
+      setUser(userData);
+    }
+  }, [navigate]);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -48,12 +58,16 @@ const LibraryDashboard = () => {
               Library Management System
             </h2>
             <div className="flex items-center space-x-4">
-              <div className="text-sm text-gray-500">Welcome back, Admin</div>
+              <div className="text-sm text-gray-500">
+                Welcome back, {user?.name || "Admin"}
+              </div>
               <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
-                <span className="text-white text-sm font-medium">A</span>
+                <span className="text-white text-sm font-medium">
+                  {user?.name?.charAt(0).toUpperCase() || "A"}
+                </span>
               </div>
               <button
-                className="bg-red-500 hover:bg-red-600 px-4 py-1 rounded"
+                className="bg-red-500 hover:bg-red-600 text-white px-4 py-1 rounded transition-colors"
                 onClick={handleLogout}
               >
                 Logout

@@ -15,53 +15,83 @@ const Login = () => {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    setError(""); // Clear previous errors
+
     try {
+      // Add headers and ensure proper data format
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      };
+
+      const loginData = {
+        email: email.trim(),
+        password: password,
+      };
+
+      console.log("Sending login request with:", loginData); // Debug log
+
       const res = await axios.post(
         "http://localhost:5100/api/auth/login",
-        {
-          email,
-          password,
-        },
-        { withCredentials: true }
+        loginData,
+        config
       );
 
-      const { data } = res;
-      const { user, token } = data;
+      if (!res.data || !res.data.token) {
+        throw new Error("Invalid response from server");
+      }
+
+      const { user, token } = res.data;
+
+      // Store user data and token
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
 
-      // Log the user data and token
-      console.log("User data:", user);
-      console.log("Token:", token);
+      // Debug logs
+      console.log("Login response:", res.data);
+      console.log("User role:", user.role);
 
-      // Navigate based on role
+      // Navigate based on role with clearer logic
       if (user.role === "librarian") {
-        toast.success("Login successful ", {
+        toast.success("Welcome Admin!", {
           position: "top-right",
           autoClose: 2000,
-          hideProgressBar: false,
         });
-        navigate("/admin/*");
+        navigate("/admin");
       } else if (user.role === "borrower") {
-        navigate("/user/*");
-      } else {
-        setError("Unknown role. Contact admin.");
-      }
-
-      console.log("Login successful:", user);
-    } catch (error) {
-      toast.error(
-        error.response?.data?.message || "Login failed. Please try again.",
-        {
+        toast.success("Welcome User!", {
           position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-        }
-      );
-      setError(
-        error.response?.data?.message || "Login failed. Please try again."
-      );
-      console.error("Login error:", error);
+          autoClose: 2000,
+        });
+        navigate("/user");
+      } else {
+        setError("Invalid user role");
+      }
+    } catch (error) {
+      console.error("Login error details:", {
+        message: error.response?.data?.message,
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+      });
+
+      // More specific error messages
+      if (error.response?.status === 401) {
+        setError("Invalid email or password");
+        toast.error("Invalid email or password", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      } else {
+        setError(
+          error.response?.data?.message || "Login failed. Please try again."
+        );
+        toast.error("Login failed. Please try again.", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
     }
   }
 
