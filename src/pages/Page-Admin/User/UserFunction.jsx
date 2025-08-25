@@ -152,89 +152,98 @@ const UserDashboard = () => {
   );
 
   return (
-    <div className="max-w-6xl mx-auto">
+    <div className="w-full mx-auto p-6 bg-gray-50 min-h-screen">
       {/* Header */}
-      <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+      <div className="bg-gradient-to-r from-blue-600 to-blue-800 rounded-xl shadow-lg p-8 mb-6">
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <Users className="w-8 h-8 text-blue-600" />
-            <h1 className="text-3xl font-bold text-gray-800">User Dashboard</h1>
+          <div className="flex items-center space-x-4">
+            <Users className="w-10 h-10 text-white" />
+            <div>
+              <h1 className="text-3xl font-bold text-white">User Dashboard</h1>
+              <p className="text-blue-100 mt-1">Manage system users</p>
+            </div>
           </div>
           <button
             onClick={() => setIsModalOpen(true)}
             disabled={loading}
-            className="bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors"
+            className="bg-white hover:bg-blue-50 disabled:bg-blue-100 text-blue-600 px-6 py-3 rounded-lg flex items-center space-x-2 transition-all transform hover:scale-105 shadow-md"
           >
-            <Plus className="w-4 h-4" />
+            <Plus className="w-5 h-5" />
             <span>Add User</span>
           </button>
         </div>
       </div>
 
       {/* Search and Stats */}
-      <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
+      <div className="grid md:grid-cols-3 gap-6 mb-6">
+        <div className="bg-white rounded-xl shadow-md p-6">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
             <input
               type="text"
               placeholder="Search users..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent w-64"
+              className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
             />
           </div>
-          <div className="flex space-x-4">
-            <div className="bg-blue-50 px-4 py-2 rounded-lg">
-              <span className="text-sm font-medium text-blue-800">
-                Total Users: {users.length}
-              </span>
-            </div>
-            <div className="bg-green-50 px-4 py-2 rounded-lg">
-              <span className="text-sm font-medium text-green-800">
-                Librarians: {users.filter((u) => u.role === "librarian").length}
-              </span>
-            </div>
+        </div>
+
+        <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-md p-6 text-white">
+          <div className="flex items-center justify-between">
+            <span className="text-blue-100">Total Users</span>
+            <Users className="w-6 h-6 text-blue-200" />
+          </div>
+          <div className="text-3xl font-bold mt-2">{users.length}</div>
+        </div>
+
+        <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl shadow-md p-6 text-white">
+          <div className="flex items-center justify-between">
+            <span className="text-purple-100">Librarians</span>
+            <Users className="w-6 h-6 text-purple-200" />
+          </div>
+          <div className="text-3xl font-bold mt-2">
+            {users.filter((u) => u.role === "librarian").length}
           </div>
         </div>
       </div>
 
       {/* Loading Indicator */}
       {loading && (
-        <div className="bg-white rounded-lg shadow-md p-6 mb-6 text-center">
-          <div className="text-gray-600">Loading...</div>
+        <div className="flex items-center justify-center p-8">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
         </div>
       )}
 
       {/* Users Table */}
-      <div className="bg-white rounded-lg shadow-md overflow-hidden">
+      <div className="bg-white rounded-xl shadow-md overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full table-auto">
-            <thead className="bg-gray-50">
+          <table className="w-full">
+            <thead className="bg-gray-50 border-b border-gray-200">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                   Name
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                   Email
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                   Role
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                   Actions
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="divide-y divide-gray-200">
               {filteredUsers.map((user) => (
                 <tr
                   key={user._id}
-                  className="hover:bg-gray-50 transition-colors"
+                  className="hover:bg-blue-50 transition-colors duration-150"
                 >
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center">
-                      <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center">
+                  <td className="px-6 py-4">
+                    <div className="flex items-center space-x-4">
+                      <div className="w-12 h-12 rounded-full overflow-hidden bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center shadow-inner">
                         {user.profileImage ? (
                           <img
                             src={user.profileImage}
@@ -246,29 +255,27 @@ const UserDashboard = () => {
                             }}
                           />
                         ) : (
-                          <div className="text-gray-400 text-lg">👤</div>
+                          <div className="text-gray-400 text-2xl">👤</div>
                         )}
                         <div
-                          className="w-full h-full bg-blue-500 flex items-center justify-center text-white font-medium text-sm"
+                          className="w-full h-full rounded-full bg-gray-100 flex items-center justify-center text-gray-400 text-2xl"
                           style={{ display: "none" }}
                         >
-                          {user.name.charAt(0).toUpperCase()}
+                          👤
                         </div>
                       </div>
-                      <div className="ml-3">
-                        <div className="text-sm font-medium text-gray-900">
+                      <div>
+                        <div className="text-sm font-semibold text-gray-900">
                           {user.name}
                         </div>
-                        <div className="text-xs text-gray-500">
-                          ID: {user._id}
-                        </div>
+                        <div className="text-xs text-gray-500">{user._id}</div>
                       </div>
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-6 py-4">
                     <div className="text-sm text-gray-900">{user.email}</div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-6 py-4">
                     <span
                       className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                         user.role === "librarian"
@@ -279,21 +286,21 @@ const UserDashboard = () => {
                       {user.role}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                    <button
-                      onClick={() => handleEdit(user)}
-                      disabled={loading}
-                      className="text-blue-600 hover:text-blue-900 disabled:text-blue-400 p-1 hover:bg-blue-50 rounded transition-colors"
-                    >
-                      <Edit className="w-4 h-4" />
-                    </button>
-                    <button
-                      onClick={() => handleDelete(user)}
-                      disabled={loading}
-                      className="text-red-600 hover:text-red-900 disabled:text-red-400 p-1 hover:bg-red-50 rounded transition-colors"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
+                  <td className="px-6 py-4">
+                    <div className="flex items-center space-x-3">
+                      <button
+                        onClick={() => handleEdit(user)}
+                        className="text-blue-600 hover:bg-blue-100 p-2 rounded-lg transition-colors duration-150"
+                      >
+                        <Edit className="w-5 h-5" />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(user)}
+                        className="text-red-600 hover:bg-red-100 p-2 rounded-lg transition-colors duration-150"
+                      >
+                        <Trash2 className="w-5 h-5" />
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -304,8 +311,8 @@ const UserDashboard = () => {
 
       {/* Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 bg-transparent">
-          <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
+        <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-xl shadow-2xl w-full max-w-md transform transition-all">
             <div className="flex items-center justify-between p-6 border-b border-gray-200">
               <h3 className="text-lg font-semibold text-gray-900">
                 {editingUser ? "Edit User" : "Add New User"}

@@ -23,7 +23,7 @@ const UserDashboard = () => {
     <nav className="bg-white shadow-sm border-b px-6 py-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-8">
-          <h1 className="text-2xl font-bold text-purple-600 italic">
+          <h1 className="text-2xl font-bold text-blue-600 italic">
             Library Portal
           </h1>
           <div className="flex space-x-6">
@@ -31,8 +31,8 @@ const UserDashboard = () => {
               onClick={() => setActiveTab("dashboard")}
               className={`flex items-center space-x-2 px-3 py-2 rounded-md transition-colors ${
                 activeTab === "dashboard"
-                  ? "text-purple-600 bg-purple-50"
-                  : "text-gray-600 hover:text-purple-600"
+                  ? "text-blue-600 bg-blue-50"
+                  : "text-gray-600 hover:text-blue-600"
               }`}
             >
               <BookOpen size={16} />
@@ -42,8 +42,8 @@ const UserDashboard = () => {
               onClick={() => setActiveTab("browse")}
               className={`flex items-center space-x-2 px-3 py-2 rounded-md transition-colors ${
                 activeTab === "browse"
-                  ? "text-purple-600 bg-purple-50"
-                  : "text-gray-600 hover:text-purple-600"
+                  ? "text-blue-600 bg-blue-50"
+                  : "text-gray-600 hover:text-blue-600"
               }`}
             >
               <Search size={16} />
@@ -53,8 +53,8 @@ const UserDashboard = () => {
               onClick={() => setActiveTab("returns")}
               className={`flex items-center space-x-2 px-3 py-2 rounded-md transition-colors ${
                 activeTab === "returns"
-                  ? "text-purple-600 bg-purple-50"
-                  : "text-gray-600 hover:text-purple-600"
+                  ? "text-blue-600 bg-blue-50"
+                  : "text-gray-600 hover:text-blue-600"
               }`}
             >
               <RotateCcw size={16} />
@@ -64,8 +64,8 @@ const UserDashboard = () => {
               onClick={() => setActiveTab("profile")}
               className={`flex items-center space-x-2 px-3 py-2 rounded-md transition-colors ${
                 activeTab === "profile"
-                  ? "text-purple-600 bg-purple-50"
-                  : "text-gray-600 hover:text-purple-600"
+                  ? "text-blue-600 bg-blue-50"
+                  : "text-gray-600 hover:text-blue-600"
               }`}
             >
               <User size={16} />
@@ -76,7 +76,7 @@ const UserDashboard = () => {
         <div className="flex items-center space-x-4">
           <Bell className="text-gray-400" size={20} />
           <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center text-white text-sm font-semibold">
+            <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white text-sm font-semibold">
               {userName
                 ? userName
                     .split(" ")

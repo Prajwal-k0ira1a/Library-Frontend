@@ -1,58 +1,66 @@
 import axios from "axios";
-
 const API_BASE = "http://localhost:5100/api/books";
 
-//Create Book
 export async function createBook(bookData) {
   try {
     const response = await axios.post(`${API_BASE}/create`, bookData, {
-      withCredentials: true, // 🔑 send cookies
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        // No need for Content-Type, axios handles FormData automatically
+      },
+      withCredentials: true,
     });
     return response.data;
   } catch (error) {
-    console.error("Create book error:", error.response?.data || error.message);
-    throw error;
+    console.error("Create book error:", error);
+    throw new Error(error.response?.data?.error || error.message);
   }
 }
 
-//Update Book
-export async function updateBook(bookId, bookData) {
+export const updateBook = async (bookId, bookData) => {
   try {
     const response = await axios.put(`${API_BASE}/update/${bookId}`, bookData, {
-      withCredentials: true, // 🔑
+     
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      withCredentials: true,
     });
     return response.data;
-  } catch (error) {
-    console.error("Update book error:", error.response?.data || error.message);
-    throw error;
-  }
-}
+    // In your update function
 
-//Delete Book
+  } catch (error) {
+    console.error("Update book error:", error);
+    throw new Error(error.response?.data?.error || error.message);
+  }
+};
+
 export async function deleteBook(bookId) {
   try {
     const response = await axios.delete(`${API_BASE}/delete/${bookId}`, {
-      withCredentials: true, // 🔑
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      withCredentials: true,
     });
     return response.data;
   } catch (error) {
-    console.error("Delete book error:", error.response?.data || error.message);
-    throw error;
+    console.error("Delete book error:", error);
+    throw new Error(error.response?.data?.error || error.message);
   }
 }
 
-//Get All Books
 export async function getAllBooks() {
   try {
     const response = await axios.get(`${API_BASE}/getAll`, {
-      withCredentials: true, // 🔑
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      withCredentials: true,
     });
     return response.data;
   } catch (error) {
-    console.error(
-      "Get all books error:",
-      error.response?.data || error.message
-    );
-    throw error;
+    console.error("Get all books error:", error);
+    throw new Error(error.response?.data?.error || error.message);
   }
 }

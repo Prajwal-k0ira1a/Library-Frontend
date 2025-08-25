@@ -8,7 +8,7 @@ import Contact from './Contact';
 import Footer from './Footer';
 const Home = () => {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="bg-white">
       <Header />
       <main>
         <Hero />

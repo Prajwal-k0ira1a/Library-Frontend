@@ -24,16 +24,14 @@ const genres = [
 // Modal component
 const Modal = ({ isOpen, onClose, children }) => {
   if (!isOpen) return null;
-
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 bg-transparent">
-      <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4 transition-all duration-300">
+      <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto transform transition-all duration-300 scale-100 opacity-100">
         {children}
       </div>
     </div>
   );
 };
-
 
 // AddBookForm component
 const AddBookForm = ({ isVisible, onClose, onSave, editingBook }) => {
@@ -379,7 +377,7 @@ const LibraryBooksLayout = () => {
     try {
       setLoading(true);
       const result = await getAllBooks();
-      setBooks(result.data || result );
+      setBooks(result.data || result);
     } catch (err) {
       console.error("Error fetching books:", err);
       setError("Failed to load books. Please try again.");
@@ -402,7 +400,7 @@ const LibraryBooksLayout = () => {
       // Add new book
       setBooks((prev) => [...prev, bookData]);
     }
-    setEditingBook(null);
+    setEditingBook(bookData);
     fetchBooks(); // Refresh the list to get latest data
   };
 
@@ -439,20 +437,20 @@ const LibraryBooksLayout = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto p-6">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+      <div className="max-w-7xl mx-auto p-6 space-y-6">
         {/* Header */}
-        <div className="bg-white shadow-sm border-b border-gray-200 rounded-lg p-8 mb-6">
+        <div className="bg-gradient-to-r from-blue-600 to-blue-800 rounded-2xl shadow-lg p-8">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              <h1 className="text-4xl font-bold text-white mb-2 tracking-tight">
                 Library Management System
               </h1>
-              <p className="text-gray-600">Browse and manage library books</p>
+              <p className="text-blue-100">Browse and manage library books</p>
             </div>
             <button
               onClick={() => setIsFormVisible(true)}
-              className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
+              className="flex items-center gap-2 px-6 py-3 bg-white text-blue-600 rounded-xl hover:bg-blue-50 transition-all duration-200 transform hover:scale-105 shadow-md"
             >
               <Plus className="w-5 h-5" />
               Add Book
@@ -460,27 +458,27 @@ const LibraryBooksLayout = () => {
           </div>
         </div>
 
-        {/* Search, Filter, View Toggle */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+        {/* Search and Filter Bar */}
+        <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
             <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 flex-1">
-              <div className="relative flex-1 max-w-md">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <div className="relative flex-1 max-w-md group">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 group-hover:text-blue-500 transition-colors w-5 h-5" />
                 <input
                   type="text"
-                  placeholder="Search books by title, author, or ISBN..."
+                  placeholder="Search books..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                 />
               </div>
 
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-3">
                 <Filter className="w-5 h-5 text-gray-400" />
                 <select
                   value={selectedGenre}
                   onChange={(e) => setSelectedGenre(e.target.value)}
-                  className="px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  className="px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                 >
                   {genres.map((genre) => (
                     <option key={genre} value={genre}>
@@ -491,25 +489,23 @@ const LibraryBooksLayout = () => {
               </div>
             </div>
 
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-2 bg-gray-100 p-1 rounded-lg">
               <button
                 onClick={() => setViewMode("grid")}
-                aria-label="Grid view"
-                className={`p-2 rounded-lg transition-colors ${
+                className={`p-2 rounded-lg transition-all duration-200 ${
                   viewMode === "grid"
-                    ? "bg-blue-100 text-blue-600"
-                    : "text-gray-400 hover:text-gray-600"
+                    ? "bg-white text-blue-600 shadow"
+                    : "text-gray-500 hover:text-gray-700"
                 }`}
               >
                 <Grid className="w-5 h-5" />
               </button>
               <button
                 onClick={() => setViewMode("list")}
-                aria-label="List view"
-                className={`p-2 rounded-lg transition-colors ${
+                className={`p-2 rounded-lg transition-all duration-200 ${
                   viewMode === "list"
-                    ? "bg-blue-100 text-blue-600"
-                    : "text-gray-400 hover:text-gray-600"
+                    ? "bg-white text-blue-600 shadow"
+                    : "text-gray-500 hover:text-gray-700"
                 }`}
               >
                 <List className="w-5 h-5" />
@@ -518,8 +514,8 @@ const LibraryBooksLayout = () => {
           </div>
         </div>
 
-        {/* Books Grid/List */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        {/* Books Display */}
+        <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6">
           <div className="mb-4">
             <h2 className="text-lg font-semibold text-gray-900">
               Books Collection ({filteredBooks.length}{" "}
@@ -557,11 +553,11 @@ const LibraryBooksLayout = () => {
               </p>
             </div>
           ) : viewMode === "grid" ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {filteredBooks.map((book) => (
                 <div
                   key={book._id || book.id}
-                  className="group bg-white rounded-xl border border-gray-200 overflow-hidden shadow hover:shadow-lg transition-all duration-200 hover:-translate-y-1 relative"
+                  className="group bg-white rounded-xl border border-gray-200 overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
                 >
                   <div className="aspect-[3/4] bg-gray-100 relative overflow-hidden">
                     {book.bookImages?.[0] || book.coverImage ? (
@@ -640,84 +636,87 @@ const LibraryBooksLayout = () => {
               ))}
             </div>
           ) : (
+            /* List View */
             <div className="space-y-4">
               {filteredBooks.map((book) => (
                 <div
                   key={book._id || book.id}
-                  className="flex items-center p-4 border border-gray-200 rounded-xl shadow hover:shadow-md transition-shadow bg-white relative group"
+                  className="group bg-white rounded-xl border border-gray-200 p-4 shadow-md hover:shadow-lg transition-all duration-200"
                 >
-                  <div className="w-16 h-20 bg-gray-100 rounded-md overflow-hidden flex-shrink-0">
-                    {book.bookImages?.[0] || book.coverImage ? (
-                      <img
-                        src={book.bookImages?.[0] || book.coverImage}
-                        alt={book.title || book.name}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-gray-200">
-                        <Book className="w-8 h-8 text-gray-400" />
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="ml-4 flex-1">
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1">
-                        <h3 className="font-semibold text-gray-900 hover:text-blue-600 transition-colors cursor-pointer">
-                          {book.title || book.name}
-                        </h3>
-                        <p className="text-sm text-gray-600 mt-1">
-                          by {book.author}
-                        </p>
-                        <div className="flex items-center space-x-4 mt-2 text-xs text-gray-500">
-                          <span>ISBN: {book.isbn}</span>
-                          <span>Genre: {book.genre}</span>
+                  <div className="flex items-center space-x-4">
+                    {/* Book Image */}
+                    <div className="w-16 h-20 bg-gray-100 rounded-md overflow-hidden flex-shrink-0">
+                      {book.bookImages?.[0] || book.coverImage ? (
+                        <img
+                          src={book.bookImages?.[0] || book.coverImage}
+                          alt={book.title || book.name}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-gray-200">
+                          <Book className="w-8 h-8 text-gray-400" />
                         </div>
-                      </div>
+                      )}
+                    </div>
 
-                      <div className="flex items-center space-x-4 ml-4">
-                        <div className="text-right">
-                          <div className="text-sm text-gray-600">Available</div>
-                          <div className="font-semibold text-gray-900">
-                            {book.available}/{book.quantity}
-                          </div>
-                        </div>
-
-                        <span
-                          className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
-                            book.status === "Available"
-                              ? "bg-green-100 text-green-800"
-                              : "bg-red-100 text-red-800"
-                          }`}
-                        >
-                          <div
-                            className={`w-2 h-2 rounded-full mr-1.5 ${
-                              book.status === "Available"
-                                ? "bg-green-500"
-                                : "bg-red-500"
-                            }`}
-                          ></div>
-                          {book.status}
-                        </span>
+                    {/* Book Details */}
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-gray-900 hover:text-blue-600 transition-colors cursor-pointer">
+                        {book.title || book.name}
+                      </h3>
+                      <p className="text-sm text-gray-600 mt-1">
+                        by {book.author}
+                      </p>
+                      <div className="flex items-center space-x-4 mt-2 text-xs text-gray-500">
+                        <span>ISBN: {book.isbn}</span>
+                        <span>Genre: {book.genre}</span>
                       </div>
                     </div>
-                  </div>
 
-                  <div className="absolute top-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button
-                      onClick={() => handleEdit(book)}
-                      className="p-2 rounded-full bg-blue-100 hover:bg-blue-200 text-blue-600 shadow transition"
-                      title="Edit"
-                    >
-                      <Pencil className="w-4 h-4" />
-                    </button>
-                    <button
-                      onClick={() => handleDelete(book._id || book.id)}
-                      className="p-2 rounded-full bg-red-100 hover:bg-red-200 text-red-600 shadow transition"
-                      title="Delete"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
+                    {/* Status and Available Count */}
+                    <div className="flex items-center space-x-6">
+                      <div className="text-right">
+                        <div className="text-sm text-gray-600">Available</div>
+                        <div className="font-semibold text-gray-900">
+                          {book.available}/{book.quantity}
+                        </div>
+                      </div>
+
+                      <span
+                        className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
+                          book.status === "Available"
+                            ? "bg-green-100 text-green-800"
+                            : "bg-red-100 text-red-800"
+                        }`}
+                      >
+                        <div
+                          className={`w-2 h-2 rounded-full mr-1.5 ${
+                            book.status === "Available"
+                              ? "bg-green-500"
+                              : "bg-red-500"
+                          }`}
+                        ></div>
+                        {book.status}
+                      </span>
+                    </div>
+
+                    {/* Actions */}
+                    <div className="flex items-center space-x-2">
+                      <button
+                        onClick={() => handleEdit(book)}
+                        className="p-2 rounded-full bg-blue-100 hover:bg-blue-200 text-blue-600 shadow transition"
+                        title="Edit"
+                      >
+                        <Pencil className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(book._id || book.id)}
+                        className="p-2 rounded-full bg-red-100 hover:bg-red-200 text-red-600 shadow transition"
+                        title="Delete"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
                   </div>
                 </div>
               ))}
