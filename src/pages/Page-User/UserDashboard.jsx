@@ -5,18 +5,23 @@ import Dashboard from "./Dashboard";
 import BrowseBooks from "./BrowseBooks";
 import BookReturns from "./BookReturns";
 import Profile from "./Profile";
+import { getCurrentUser } from "./borrowerApi";
 
 const UserDashboard = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [userName, setUserName] = useState("");
 
   useEffect(() => {
-    axios
-      .get("http://localhost:5100/api/users/me")
-      .then((res) => setUserName(res.data.name))
-      .catch((err) => {
-        console.error("Failed to fetch user name:", err);
-      });
+    const fetchUserName = async () => {
+      try {
+        const result = await getCurrentUser();
+        setUserName(result.data.name);
+      } catch (error) {
+        console.error("Failed to fetch user name:", error);
+      }
+    };
+
+    fetchUserName();
   }, []);
 
   const Navigation = () => (

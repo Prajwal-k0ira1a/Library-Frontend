@@ -1,11 +1,20 @@
 import React, { useState, useEffect } from "react";
+import { Edit, Save, X, Trash2 } from "lucide-react";
+import { toast } from "react-toastify";
 import axios from "axios";
-import { Edit, Trash2 } from "lucide-react";
 
 const Profile = () => {
   const [emailNotifications, setEmailNotifications] = useState(true);
   const [smsReminders, setSmsReminders] = useState(false);
   const [userData, setUserData] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editForm, setEditForm] = useState({
+    name: "",
+    phone: "",
+    address: "",
+    emailNotifications: true,
+    smsReminders: false,
+  });
 
   useEffect(() => {
     axios
@@ -16,19 +25,52 @@ const Profile = () => {
       });
   }, []);
 
-  const handleEditProfile = () => {
-    // Example: update email notifications
-    axios
-      .put(`http://localhost:5100/api/users/update/${userData._id}`, {
-        emailNotifications,
-        smsReminders,
-      })
-      .then(() => {
-        // Optionally update UI or show success
-      })
-      .catch((err) => {
-        console.error("Failed to update profile:", err);
+  useEffect(() => {
+    if (userData) {
+      setEditForm({
+        name: userData.name || "",
+        phone: userData.phone || "",
+        address: userData.address || "",
+        emailNotifications: userData.emailNotifications || false,
+        smsReminders: userData.smsReminders || false,
       });
+    }
+  }, [userData]);
+
+  const handleEditProfile = () => {
+    setIsEditing(true);
+  };
+
+  const handleCancelEdit = () => {
+    setIsEditing(false);
+    // Reset form to original values
+    setEditForm({
+      name: userData.name || "",
+      phone: userData.phone || "",
+      address: userData.address || "",
+      emailNotifications: userData.emailNotifications || false,
+      smsReminders: userData.smsReminders || false,
+    });
+  };
+
+  const handleSaveProfile = async () => {
+    try {
+      const response = await axios.put(
+        `http://localhost:5100/api/users/update/${userData._id}`,
+        editForm,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      setUserData({ ...userData, ...response.data });
+      setIsEditing(false);
+      toast.success("Profile updated successfully!");
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to update profile");
+    }
   };
 
   const handleDeleteAccount = () => {
@@ -40,7 +82,10 @@ const Profile = () => {
       axios
         .delete(`http://localhost:5100/api/users/delete/${userData._id}`)
         .then(() => {
-          // Optionally redirect or show success
+          // Redirect to login page after account deletion
+          localStorage.removeItem("token");
+          localStorage.removeItem("user");
+          window.location.href = "/login";
         })
         .catch((err) => {
           console.error("Failed to delete account:", err);
@@ -90,13 +135,32 @@ const Profile = () => {
               <h3 className="text-lg font-semibold text-gray-900">
                 Personal Information
               </h3>
-              <button
-                onClick={handleEditProfile}
-                className="flex items-center space-x-2 text-purple-600 hover:text-purple-700 transition-colors"
-              >
-                <Edit size={16} />
-                <span>Edit Profile</span>
-              </button>
+              {!isEditing ? (
+                <button
+                  onClick={handleEditProfile}
+                  className="flex items-center space-x-2 text-blue-600 hover:text-blue-700 transition-colors"
+                >
+                  <Edit size={16} />
+                  <span>Edit Profile</span>
+                </button>
+              ) : (
+                <div className="flex space-x-2">
+                  <button
+                    onClick={handleSaveProfile}
+                    className="flex items-center space-x-2 text-green-600 hover:text-green-700"
+                  >
+                    <Save size={16} />
+                    <span>Save</span>
+                  </button>
+                  <button
+                    onClick={handleCancelEdit}
+                    className="flex items-center space-x-2 text-gray-600 hover:text-gray-700"
+                  >
+                    <X size={16} />
+                    <span>Cancel</span>
+                  </button>
+                </div>
+              )}
             </div>
             <div className="p-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -104,9 +168,20 @@ const Profile = () => {
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Full Name
                   </label>
-                  <p className="text-gray-900 bg-gray-50 px-3 py-2 rounded-md">
-                    {userData.name}
-                  </p>
+                  {isEditing ? (
+                    <input
+                      type="text"
+                      value={editForm.name}
+                      onChange={(e) =>
+                        setEditForm({ ...editForm, name: e.target.value })
+                      }
+                      className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+                    />
+                  ) : (
+                    <p className="text-gray-900 bg-gray-50 px-3 py-2 rounded-md">
+                      {userData.name}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -120,9 +195,20 @@ const Profile = () => {
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Phone Number
                   </label>
-                  <p className="text-gray-900 bg-gray-50 px-3 py-2 rounded-md">
-                    {userData.phone}
-                  </p>
+                  {isEditing ? (
+                    <input
+                      type="text"
+                      value={editForm.phone}
+                      onChange={(e) =>
+                        setEditForm({ ...editForm, phone: e.target.value })
+                      }
+                      className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+                    />
+                  ) : (
+                    <p className="text-gray-900 bg-gray-50 px-3 py-2 rounded-md">
+                      {userData.phone}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -136,9 +222,20 @@ const Profile = () => {
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Address
                   </label>
-                  <p className="text-gray-900 bg-gray-50 px-3 py-2 rounded-md">
-                    {userData.address}
-                  </p>
+                  {isEditing ? (
+                    <input
+                      type="text"
+                      value={editForm.address}
+                      onChange={(e) =>
+                        setEditForm({ ...editForm, address: e.target.value })
+                      }
+                      className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+                    />
+                  ) : (
+                    <p className="text-gray-900 bg-gray-50 px-3 py-2 rounded-md">
+                      {userData.address}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>

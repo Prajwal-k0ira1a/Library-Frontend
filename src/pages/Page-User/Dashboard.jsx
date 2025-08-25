@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { Book, Calendar, Clock, User } from "lucide-react";
+import { toast } from "react-toastify";
+import { Book, Calendar, Clock } from "lucide-react";
+import { getCurrentUser, getMyBorrows } from "./borrowerApi";
 
 const Dashboard = () => {
   const [userData, setUserData] = useState(null);
@@ -13,32 +14,41 @@ const Dashboard = () => {
   });
 
   useEffect(() => {
-    // Fetch user profile
-    axios
-      .get("http://localhost:5100/api/users/me")
-      .then((res) => setUserData(res.data))
-      .catch((err) => {
-        console.error("Failed to fetch user profile:", err);
-      });
+    const fetchData = async () => {
+      try {
+        // Fetch user profile
+        const userResult = await getCurrentUser();
+        if (!userResult.success) {
+          toast.error(userResult.error);
+          return;
+        }
+        setUserData(userResult.data);
 
-    // Fetch borrowed books
-    axios
-      .get("http://localhost:5100/api/borrow/my")
-      .then((res) => {
-        setBorrowedBooks(res.data);
-        // Calculate stats from borrowedBooks
-        const borrowed = res.data.length;
-        const overdue = res.data.filter((b) => b.daysOverdue > 0).length;
+        // Fetch borrowed books
+        const borrowsResult = await getMyBorrows();
+        if (!borrowsResult.success) {
+          toast.error(borrowsResult.error);
+          return;
+        }
+
+        const borrowData = borrowsResult.data || [];
+        setBorrowedBooks(borrowData);
+
+        // Calculate stats
+        const borrowed = borrowData.length;
+        const overdue = borrowData.filter((b) => b.daysOverdue > 0).length;
         const onTime = borrowed - overdue;
-        const totalDays = res.data.reduce(
-          (acc, b) => acc + (b.daysOverdue || 0),
-          0
-        );
+        const totalDays =
+          borrowData.reduce((acc, b) => acc + (b.daysOverdue || 0), 0) || 0;
+
         setStats({ borrowed, onTime, overdue, totalDays });
-      })
-      .catch((err) => {
-        console.error("Failed to fetch borrowed books:", err);
-      });
+      } catch (err) {
+        console.error("Error fetching data:", err);
+        toast.error("Failed to load dashboard data");
+      }
+    };
+
+    fetchData();
   }, []);
 
   return (
