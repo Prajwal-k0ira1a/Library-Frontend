@@ -1,6 +1,8 @@
 import axios from "axios";
 
-const API_BASE = "http://localhost:5100/api";
+const API_BASE = "http://localhost:5100/api/borrow"; // Update base URL to match backend
+const API_BOOKS = "http://localhost:5100/api/books";
+const API_USERS = "http://localhost:5100/api/users";
 
 // Helper to get auth token
 const getAuthHeader = () => {
@@ -19,31 +21,42 @@ const getAuthHeader = () => {
 export async function requestBorrow(bookId) {
   try {
     const response = await axios.post(
-      `${API_BASE}/borrow`,
+      `${API_BASE}/request-borrow`, // Changed from /request-borrow to match backend route
       { bookId },
       getAuthHeader()
     );
-    return response.data;
+
+    if (response.status === 201 || response.status === 200) {
+      return {
+        success: true,
+        data: response.data,
+      };
+    }
+    throw new Error(response.data?.message || "Failed to request book");
   } catch (error) {
-    throw new Error(
-      error.response?.data?.message || "Failed to request book borrow"
-    );
+    console.error("Borrow request error:", error);
+    return {
+      success: false,
+      error: error.response?.data?.message || "Failed to request book borrow",
+      data: null,
+    };
   }
 }
 
 export async function getMyBorrows() {
   try {
-    const response = await axios.get(`${API_BASE}/borrow/my`, getAuthHeader());
+    const response = await axios.get(`${API_BASE}/my`, getAuthHeader());
 
-    if (!response.data) {
-      throw new Error("No data received");
+    if (response.status !== 200) {
+      throw new Error("Failed to fetch borrows");
     }
 
     return {
       success: true,
-      data: response.data.data || [],
+      data: response.data?.data || [],
     };
   } catch (error) {
+    console.error("Get borrows error:", error);
     return {
       success: false,
       error: error.response?.data?.message || "Failed to fetch borrowed books",
@@ -55,15 +68,21 @@ export async function getMyBorrows() {
 export async function requestBookReturn(borrowId) {
   try {
     const response = await axios.post(
-      `${API_BASE}/return/${borrowId}`,
+      `${API_BASE}/return/${borrowId}`, // Fixed return endpoint
       {},
       getAuthHeader()
     );
-    return response.data;
+
+    return {
+      success: true,
+      data: response.data,
+    };
   } catch (error) {
-    throw new Error(
-      error.response?.data?.message || "Failed to request return"
-    );
+    console.error("Return request error:", error);
+    return {
+      success: false,
+      error: error.response?.data?.message || "Failed to request return",
+    };
   }
 }
 
@@ -109,24 +128,43 @@ export async function approveBookReturn(borrowId) {
   }
 }
 
-// Still need this to show available books
+// Update getAllAvailableBooks to use correct endpoint
 export async function getAllAvailableBooks() {
   try {
     const response = await axios.get(
-      `${API_BASE}/books/getAll`,
+      `${API_BOOKS}/getAll`, // Changed to correct books endpoint
       getAuthHeader()
     );
-    return response.data;
+
+    if (response.status !== 200) {
+      throw new Error("Failed to fetch books");
+    }
+
+    return {
+      success: true,
+      data: response.data?.data || [],
+    };
   } catch (error) {
-    throw new Error(error.response?.data?.message || "Failed to fetch books");
+    console.error("Get books error:", error);
+    return {
+      success: false,
+      error: error.response?.data?.message || "Failed to fetch books",
+      data: [],
+    };
   }
 }
 
 export async function getCurrentUser() {
   try {
-    const response = await axios.get(`${API_BASE}/users/me`, getAuthHeader());
-    return response.data;
+    const res = await axios.get(`${API_USERS}/me`, getAuthHeader());
+    console.log("[getCurrentUser] raw response:", res.data);
+    return res.data; // NOTE: this returns { status, data, ... }
   } catch (error) {
+    console.error(
+      "[getCurrentUser] error:",
+      error.response?.status,
+      error.response?.data || error
+    );
     throw new Error(
       error.response?.data?.message || "Failed to fetch user profile"
     );

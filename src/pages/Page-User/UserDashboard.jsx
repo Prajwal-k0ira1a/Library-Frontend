@@ -6,10 +6,12 @@ import BrowseBooks from "./BrowseBooks";
 import BookReturns from "./BookReturns";
 import Profile from "./Profile";
 import { getCurrentUser } from "./borrowerApi";
+import { useNavigate } from "react-router-dom";
 
 const UserDashboard = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [userName, setUserName] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserName = async () => {
@@ -23,6 +25,14 @@ const UserDashboard = () => {
 
     fetchUserName();
   }, []);
+
+  const handleLogout = () => {
+    try {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+    } catch {}
+    navigate("/login", { replace: true });
+  };
 
   const Navigation = () => (
     <nav className="bg-white shadow-sm border-b px-6 py-4">
@@ -93,6 +103,12 @@ const UserDashboard = () => {
               {userName ? `Welcome, ${userName}` : ""}
             </span>
           </div>
+          <button
+            onClick={handleLogout}
+            className="ml-4 px-3 py-2 rounded-md text-sm font-medium text-white bg-red-600 hover:bg-red-700"
+          >
+            Log out
+          </button>
         </div>
       </div>
     </nav>

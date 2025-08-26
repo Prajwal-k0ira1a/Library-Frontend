@@ -14,7 +14,19 @@ import {
   RefreshCw,
 } from "lucide-react";
 
-const API_BASE = "http://localhost:5100/api/borrower";
+const API_BASE = "http://localhost:5100/api/borrow";
+
+// Auth header helper (librarian-protected endpoints)
+const getAuthHeader = () => {
+  const token = localStorage.getItem("token");
+  return {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    withCredentials: true,
+  };
+};
 
 const BorrowFunction = () => {
   const [activeTab, setActiveTab] = useState("pending-requests");
@@ -32,17 +44,23 @@ const BorrowFunction = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      // Get pending borrow requests
-      const pendingRes = await axios.get(`${API_BASE}/pending`);
-      setPendingRequests(pendingRes.data);
-
-      // Get pending returns (simulate with all borrows having status 'pending_return')
-      const allRes = await axios.get(`${API_BASE}/all`); // You may need to adjust endpoint
-      setAllBorrows(allRes.data);
-
-      setPendingReturns(
-        allRes.data.filter((b) => b.status === "pending_return")
+      // Get pending borrow requests (librarian)
+      const pendingRes = await axios.get(
+        `${API_BASE}/pending`,
+        getAuthHeader()
       );
+      setPendingRequests(pendingRes.data?.data || []);
+
+      // Get pending return requests
+      const pendingReturnRes = await axios.get(
+        `${API_BASE}/pending-returns`,
+        getAuthHeader()
+      );
+      setPendingReturns(pendingReturnRes.data?.data || []);
+
+      // Get all borrows for table
+      const allRes = await axios.get(`${API_BASE}/all`, getAuthHeader());
+      setAllBorrows(allRes.data?.data || []);
     } catch (err) {
       console.error("Error loading data:", err);
     }
@@ -52,7 +70,11 @@ const BorrowFunction = () => {
   const handleApproveRequest = async (requestId) => {
     setLoading(true);
     try {
-      await axios.put(`${API_BASE}/${requestId}`, { action: "approve" });
+      await axios.put(
+        `${API_BASE}/${requestId}`,
+        { status: "approved" },
+        getAuthHeader()
+      );
       setPendingRequests((prev) => prev.filter((req) => req._id !== requestId));
       fetchData();
     } catch (error) {
@@ -64,7 +86,11 @@ const BorrowFunction = () => {
   const handleRejectRequest = async (requestId) => {
     setLoading(true);
     try {
-      await axios.put(`${API_BASE}/${requestId}`, { action: "reject" });
+      await axios.put(
+        `${API_BASE}/${requestId}`,
+        { status: "rejected" },
+        getAuthHeader()
+      );
       setPendingRequests((prev) => prev.filter((req) => req._id !== requestId));
       fetchData();
     } catch (error) {
@@ -76,7 +102,11 @@ const BorrowFunction = () => {
   const handleApproveReturn = async (borrowId) => {
     setLoading(true);
     try {
-      await axios.put(`${API_BASE}/approve-return/${borrowId}`);
+      await axios.put(
+        `${API_BASE}/approve-return/${borrowId}`,
+        {},
+        getAuthHeader()
+      );
       setPendingReturns((prev) => prev.filter((ret) => ret._id !== borrowId));
       fetchData();
     } catch (error) {

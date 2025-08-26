@@ -14,7 +14,6 @@ const Navigation = ({ activeTab, setActiveTab }) => {
     { id: "users", label: "Users", icon: Users },
     { id: "books", label: "Books", icon: BookOpen },
     { id: "borrowed", label: "Borrowed", icon: Clock },
-    { id: "returns", label: "Returns", icon: ArrowLeft },
     { id: "settings", label: "Settings", icon: Settings },
   ];
 
