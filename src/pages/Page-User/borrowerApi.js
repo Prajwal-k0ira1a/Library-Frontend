@@ -132,8 +132,7 @@ export async function approveBookReturn(borrowId) {
 export async function getAllAvailableBooks() {
   try {
     const response = await axios.get(
-      `${API_BOOKS}/getAll`, // Changed to correct books endpoint
-      getAuthHeader()
+      `${API_BOOKS}/getAll` // Removed authentication requirement for browsing books
     );
 
     if (response.status !== 200) {
