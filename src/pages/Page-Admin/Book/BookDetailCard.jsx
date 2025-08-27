@@ -39,26 +39,33 @@ const DetailedBookView = ({ book, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-5 0 flex items-center justify-center p-4">
-      <div className="bg-white rounded-3xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-4">
+      <div className="bg-white rounded-2xl shadow-2xl max-w-6xl w-full h-[80vh] overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200">
-          <h2 className="text-2xl font-bold text-gray-900">Book Details</h2>
-          <button
-            onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-          >
-            <X className="w-6 h-6 text-gray-600" />
-          </button>
+        <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-t-2xl p-4 border-b border-white/20">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="p-2 bg-white/20 rounded-lg">
+                <BookOpen className="w-5 h-5 text-white" />
+              </div>
+              <h2 className="text-xl font-bold text-white">Book Details</h2>
+            </div>
+            <button
+              onClick={onClose}
+              className="p-2 hover:bg-white/20 rounded-full transition-all duration-200 text-white hover:scale-110"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
         </div>
 
         {/* Content */}
-        <div className="p-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Book Images Section */}
+        <div className="p-6 h-full overflow-hidden">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-full">
+            {/* Book Images Section - Left Column */}
             <div className="space-y-4">
-              <div className="relative">
-                <div className="aspect-[3/4] bg-gradient-to-br from-blue-500 via-purple-500 to-indigo-600 rounded-2xl overflow-hidden">
+              <div className="relative group">
+                <div className="aspect-[3/4] bg-gradient-to-br from-blue-500 via-purple-500 to-indigo-600 rounded-xl overflow-hidden shadow-lg">
                   {book.bookImages && book.bookImages.length > 0 ? (
                     <img
                       src={book.bookImages[currentImageIndex]}
@@ -67,7 +74,7 @@ const DetailedBookView = ({ book, onClose }) => {
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
-                      <BookOpen className="w-24 h-24 text-white/50" />
+                      <BookOpen className="w-20 h-20 text-white/50" />
                     </div>
                   )}
                 </div>
@@ -77,27 +84,27 @@ const DetailedBookView = ({ book, onClose }) => {
                   <>
                     <button
                       onClick={prevImage}
-                      className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-2 rounded-full shadow-lg transition-all duration-300"
+                      className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white text-gray-800 p-2 rounded-full shadow-lg transition-all duration-300 hover:scale-110"
                     >
-                      <ChevronLeft className="w-5 h-5" />
+                      <ChevronLeft className="w-4 h-4" />
                     </button>
                     <button
                       onClick={nextImage}
-                      className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-2 rounded-full shadow-lg transition-all duration-300"
+                      className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white text-gray-800 p-2 rounded-full shadow-lg transition-all duration-300 hover:scale-110"
                     >
-                      <ChevronRight className="w-5 h-5" />
+                      <ChevronRight className="w-4 h-4" />
                     </button>
 
                     {/* Image Indicators */}
-                    <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+                    <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 flex space-x-2">
                       {book.bookImages.map((_, index) => (
                         <button
                           key={index}
                           onClick={() => setCurrentImageIndex(index)}
-                          className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                          className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
                             index === currentImageIndex
-                              ? "bg-white shadow-lg"
-                              : "bg-white/50 hover:bg-white/75"
+                              ? "bg-white shadow-lg scale-125"
+                              : "bg-white/50 hover:bg-white/75 hover:scale-110"
                           }`}
                         />
                       ))}
@@ -113,9 +120,9 @@ const DetailedBookView = ({ book, onClose }) => {
                     <button
                       key={index}
                       onClick={() => setCurrentImageIndex(index)}
-                      className={`flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all duration-300 ${
+                      className={`flex-shrink-0 w-14 h-14 rounded-lg overflow-hidden border-2 transition-all duration-300 transform hover:scale-110 ${
                         index === currentImageIndex
-                          ? "border-blue-500 shadow-lg"
+                          ? "border-blue-500 shadow-lg ring-2 ring-blue-200"
                           : "border-gray-200 hover:border-gray-300"
                       }`}
                     >
@@ -130,84 +137,78 @@ const DetailedBookView = ({ book, onClose }) => {
               )}
             </div>
 
-            {/* Book Information */}
-            <div className="space-y-6">
+            {/* Book Information - Middle Column */}
+            <div className="space-y-4">
               {/* Title and Author */}
-              <div className="space-y-3">
-                <h1 className="text-3xl font-bold text-gray-900 leading-tight">
-                  {book.title}
+              <div className="space-y-2">
+                <h1 className="text-2xl font-bold text-gray-900 leading-tight line-clamp-2">
+                  Book Name: {book.title}
                 </h1>
                 <div className="flex items-center space-x-2">
-                  <User className="w-5 h-5 text-blue-600" />
-                  <p className="text-xl font-semibold text-gray-700">
+                  <div className="p-1.5 bg-blue-100 rounded-lg">
+                    <User className="w-4 h-4 text-blue-600" />
+                  </div>
+                  <p className="text-lg font-semibold text-gray-700">
                     by {book.author}
                   </p>
                 </div>
               </div>
 
               {/* Quick Stats */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-blue-50 rounded-xl p-4 border border-blue-100">
-                  <div className="flex items-center space-x-2 mb-2">
-                    <Hash className="w-4 h-4 text-blue-600" />
-                    <span className="text-sm font-medium text-blue-700">
+              <div className="grid grid-cols-2 gap-3">
+                <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-3 border border-blue-200">
+                  <div className="flex items-center space-x-2 mb-1">
+                    <div className="p-1 bg-blue-200 rounded-md">
+                      <Hash className="w-3 h-3 text-blue-700" />
+                    </div>
+                    <span className="text-xs text-blue-600 font-semibold uppercase tracking-wide">
                       ISBN
                     </span>
                   </div>
-                  <p className="text-lg font-semibold text-gray-900 font-mono">
+                  <p className="text-sm font-bold text-gray-900 font-mono">
                     {book.isbn}
                   </p>
                 </div>
 
-                <div className="bg-purple-50 rounded-xl p-4 border border-purple-100">
-                  <div className="flex items-center space-x-2 mb-2">
-                    <Tag className="w-4 h-4 text-purple-600" />
-                    <span className="text-sm font-medium text-purple-700">
+                <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg p-3 border border-purple-200">
+                  <div className="flex items-center space-x-2 mb-1">
+                    <div className="p-1 bg-purple-200 rounded-md">
+                      <Tag className="w-3 h-3 text-purple-700" />
+                    </div>
+                    <span className="text-xs text-purple-600 font-semibold uppercase tracking-wide">
                       Genre
                     </span>
                   </div>
-                  <p className="text-lg font-semibold text-gray-900">
+                  <p className="text-sm font-bold text-gray-900">
                     {book.genre}
                   </p>
                 </div>
 
-                <div className="bg-green-50 rounded-xl p-4 border border-green-100">
-                  <div className="flex items-center space-x-2 mb-2">
-                    <BookOpen className="w-4 h-4 text-green-600" />
-                    <span className="text-sm font-medium text-green-700">
+                <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-3 border border-green-200">
+                  <div className="flex items-center space-x-2 mb-1">
+                    <div className="p-1 bg-green-200 rounded-md">
+                      <BookOpen className="w-3 h-3 text-green-700" />
+                    </div>
+                    <span className="text-xs text-green-600 font-semibold uppercase tracking-wide">
                       Available
                     </span>
                   </div>
-                  <p className="text-lg font-semibold text-gray-900">
+                  <p className="text-sm font-bold text-gray-900">
                     {book.available}/{book.quantity}
                   </p>
                 </div>
 
-                <div className="bg-yellow-50 rounded-xl p-4 border border-yellow-100">
-                  <div className="flex items-center space-x-2 mb-2">
-                    <Star className="w-4 h-4 text-yellow-600" />
-                    <span className="text-sm font-medium text-yellow-700">
+                <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-lg p-3 border border-yellow-200">
+                  <div className="flex items-center space-x-2 mb-1">
+                    <div className="p-1 bg-yellow-200 rounded-md">
+                      <Star className="w-3 h-3 text-yellow-700" />
+                    </div>
+                    <span className="text-xs text-yellow-600 font-semibold uppercase tracking-wide">
                       Status
                     </span>
                   </div>
-                  <p className="text-lg font-semibold text-gray-900">
+                  <p className="text-sm font-bold text-gray-900">
                     {book.status}
-                  </p>
-                </div>
-              </div>
-
-              {/* Description */}
-              <div className="space-y-3">
-                <div className="flex items-center space-x-2">
-                  <Info className="w-5 h-5 text-indigo-600" />
-                  <h3 className="text-xl font-semibold text-gray-900">
-                    Description
-                  </h3>
-                </div>
-                <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
-                  <p className="text-gray-700 leading-relaxed text-lg">
-                    {book.description ||
-                      "No description available for this book."}
                   </p>
                 </div>
               </div>
@@ -215,40 +216,72 @@ const DetailedBookView = ({ book, onClose }) => {
               {/* Additional Details */}
               <div className="space-y-3">
                 <div className="flex items-center space-x-2">
-                  <MapPin className="w-5 h-5 text-gray-600" />
-                  <h3 className="text-xl font-semibold text-gray-900">
+                  <div className="p-1.5 bg-gray-100 rounded-lg">
+                    <MapPin className="w-4 h-4 text-gray-600" />
+                  </div>
+                  <h3 className="text-lg font-bold text-gray-900">
                     Additional Details
                   </h3>
                 </div>
+
                 <div className="space-y-3">
-                  <div className="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
-                    <span className="text-gray-600 font-medium">
+                  <div className="flex items-center justify-between p-3 bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg border border-gray-200">
+                    <span className="text-gray-700 font-medium text-sm">
                       Added to Library
                     </span>
-                    <span className="text-gray-900 font-semibold">
+                    <span className="text-gray-900 font-semibold text-sm">
                       {book.createdAt
                         ? new Date(book.createdAt).toLocaleDateString()
                         : "N/A"}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
-                    <span className="text-gray-600 font-medium">
+                  <div className="flex items-center justify-between p-3 bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg border border-gray-200">
+                    <span className="text-gray-700 font-medium text-sm">
                       Total Copies
                     </span>
-                    <span className="text-gray-900 font-semibold">
+                    <span className="text-gray-900 font-semibold text-sm">
                       {book.quantity}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
-                    <span className="text-gray-600 font-medium">
+                  <div className="flex items-center justify-between p-3 bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg border border-gray-200">
+                    <span className="text-gray-700 font-medium text-sm">
                       Currently Available
                     </span>
-                    <span className="text-gray-900 font-semibold">
+                    <span className="text-gray-900 font-semibold text-sm">
                       {book.available}
                     </span>
                   </div>
                 </div>
               </div>
+            </div>
+
+            {/* Description - Right Column */}
+            <div className="space-y-4">
+              <div className="flex items-center space-x-2">
+                <div className="p-1.5 bg-indigo-100 rounded-lg">
+                  <Info className="w-4 h-4 text-indigo-600" />
+                </div>
+                <h3 className="text-lg font-bold text-gray-900">Description</h3>
+              </div>
+              <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg p-3 border border-indigo-200">
+                <p className="text-gray-800 leading-relaxed text-sm line-clamp-4">
+                  {book.description ||
+                    "No description available for this book."}
+                </p>
+              </div>
+
+              {/* Availability Notice */}
+              {book.available === 0 && (
+                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+                  <div className="flex items-center space-x-2">
+                    <Clock className="w-4 h-4 text-yellow-600" />
+                    <p className="text-yellow-800 text-xs font-medium">
+                      This book is currently out of stock. Check back later or
+                      contact the library for availability.
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -425,7 +458,7 @@ const BookDetailCard = ({
       <div className="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:scale-[1.02]">
         {/* Book Cover and Header */}
         <div className="relative">
-          <div className="h-64 bg-gradient-to-br from-blue-500 via-purple-500 to-indigo-600 relative overflow-hidden">
+          <div className="h-60 bg-gradient-to-br from-blue-500 via-purple-500 to-indigo-600 relative overflow-hidden">
             {book.bookImages && book.bookImages.length > 0 ? (
               <img
                 src={book.bookImages[0]}
@@ -581,11 +614,21 @@ const BookDetailCard = ({
           {showBorrowButton && (
             <div className="pt-4 border-t border-gray-200">
               {isBorrowed ? (
-                <div className="flex items-center justify-center space-x-2 p-3 bg-green-50 rounded-xl border border-green-200">
-                  <CheckCircle className="w-5 h-5 text-green-600" />
-                  <span className="text-green-700 font-medium">
-                    Already Borrowed
-                  </span>
+                <div className="flex items-center justify-between p-4 bg-green-50 rounded-xl border border-green-200">
+                  <div className="flex items-center space-x-2">
+                    <CheckCircle className="w-5 h-5 text-green-600" />
+                    <span className="text-green-700 font-medium">
+                      Already Borrowed
+                    </span>
+                  </div>
+
+                  <button
+                    onClick={() => setShowDetailedView(true)}
+                    className="flex items-center justify-center space-x-2 bg-green-100 hover:bg-green-200 text-green-700 py-2 px-4 rounded-lg font-medium transition-all duration-300"
+                  >
+                    <ExternalLink className="w-4 h-4" />
+                    <span>View Details</span>
+                  </button>
                 </div>
               ) : (
                 <div className="flex space-x-3">

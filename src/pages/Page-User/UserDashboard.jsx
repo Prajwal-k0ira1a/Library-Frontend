@@ -34,85 +34,89 @@ const UserDashboard = () => {
     navigate("/login", { replace: true });
   };
 
-  const Navigation = () => (
-    <nav className="bg-white shadow-sm border-b px-6 py-4">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-8">
+ // ...existing code...
+  const Navigation = () => {
+    const tabs = [
+      { key: "dashboard", icon: <BookOpen size={16} />, label: "Dashboard" },
+      { key: "browse", icon: <Search size={16} />, label: "Browse Books" },
+      { key: "returns", icon: <RotateCcw size={16} />, label: "My Returns" },
+      { key: "profile", icon: <User size={16} />, label: "Profile" },
+    ];
+
+    // Keyboard navigation handler
+    const handleKeyDown = (e, idx) => {
+      if (e.key === "ArrowRight") {
+        setActiveTab(tabs[(idx + 1) % tabs.length].key);
+      }
+      if (e.key === "ArrowLeft") {
+        setActiveTab(tabs[(idx - 1 + tabs.length) % tabs.length].key);
+      }
+      if (e.key === "Enter" || e.key === " ") {
+        setActiveTab(tabs[idx].key);
+      }
+    };
+
+
+    return (
+      <nav
+        className="flex items-center bg-white shadow-sm border-b px-6 py-4"
+        role="navigation"
+        aria-label="User main navigation"
+      >
+        <div className="flex items-center justify-between w-full">
           <h1 className="text-2xl font-bold text-blue-600 italic">
             Library Portal
           </h1>
-          <div className="flex space-x-6">
-            <button
-              onClick={() => setActiveTab("dashboard")}
-              className={`flex items-center space-x-2 px-3 py-2 rounded-md transition-colors ${
-                activeTab === "dashboard"
-                  ? "text-blue-600 bg-blue-50"
-                  : "text-gray-600 hover:text-blue-600"
-              }`}
-            >
-              <BookOpen size={16} />
-              <span>Dashboard</span>
-            </button>
-            <button
-              onClick={() => setActiveTab("browse")}
-              className={`flex items-center space-x-2 px-3 py-2 rounded-md transition-colors ${
-                activeTab === "browse"
-                  ? "text-blue-600 bg-blue-50"
-                  : "text-gray-600 hover:text-blue-600"
-              }`}
-            >
-              <Search size={16} />
-              <span>Browse Books</span>
-            </button>
-            <button
-              onClick={() => setActiveTab("returns")}
-              className={`flex items-center space-x-2 px-3 py-2 rounded-md transition-colors ${
-                activeTab === "returns"
-                  ? "text-blue-600 bg-blue-50"
-                  : "text-gray-600 hover:text-blue-600"
-              }`}
-            >
-              <RotateCcw size={16} />
-              <span>My Returns</span>
-            </button>
-            <button
-              onClick={() => setActiveTab("profile")}
-              className={`flex items-center space-x-2 px-3 py-2 rounded-md transition-colors ${
-                activeTab === "profile"
-                  ? "text-blue-600 bg-blue-50"
-                  : "text-gray-600 hover:text-blue-600"
-              }`}
-            >
-              <User size={16} />
-              <span>Profile</span>
-            </button>
-          </div>
-        </div>
-        <div className="flex items-center space-x-4">
-          <Bell className="text-gray-400" size={20} />
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white text-sm font-semibold">
-              {userName
-                ? userName
-                    .split(" ")
-                    .map((n) => n[0])
-                    .join("")
-                : ""}
+          <div className="flex-1 flex justify-center">
+            <div className="flex items-stretch space-x-6">
+              {tabs.map((tab, idx) => (
+                <button
+                  key={tab.key}
+                  onClick={() => setActiveTab(tab.key)}
+                  className={`flex items-center space-x-2 px-3 py-2 rounded-md transition-all duration-150 ${
+                    activeTab === tab.key
+                      ? "text-blue-600 bg-blue-100 shadow font-semibold scale-105"
+                      : "text-gray-600 hover:text-blue-600"
+                  }`}
+                  aria-current={activeTab === tab.key ? "page" : undefined}
+                  aria-label={tab.label}
+                  tabIndex={0}
+                  onKeyDown={e => handleKeyDown(e, idx)}
+                >
+                  {tab.icon}
+                  <span>{tab.label}</span>
+                </button>
+              ))}
             </div>
-            <span className="text-gray-700 font-medium">
-              {userName ? `Welcome, ${userName}` : ""}
-            </span>
           </div>
-          <button
-            onClick={handleLogout}
-            className="ml-4 px-3 py-2 rounded-md text-sm font-medium text-white bg-red-600 hover:bg-red-700"
-          >
-            Log out
-          </button>
+          <div className="flex items-center space-x-4">
+            <Bell className="text-gray-400" size={20} />
+            <div className="flex items-center space-x-2">
+              <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white text-sm font-semibold">
+                {userName
+                  ? userName
+                      .split(" ")
+                      .map((n) => n[0])
+                      .join("")
+                  : ""}
+              </div>
+              <span className="text-gray-700 font-medium">
+                {userName ? `Welcome, ${userName}` : ""}
+              </span>
+            </div>
+            <button
+              onClick={handleLogout}
+              className="ml-4 px-3 py-2 rounded-md text-sm font-medium text-white bg-red-600 hover:bg-red-700"
+            >
+              Log out
+            </button>
+          </div>
         </div>
-      </div>
-    </nav>
-  );
+      </nav>
+    );
+
+  };
+
 
   const renderContent = () => {
     switch (activeTab) {

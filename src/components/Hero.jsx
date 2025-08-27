@@ -1,6 +1,8 @@
 import { Search, BookOpen, Users, Clock } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Hero = () => {
+  const navigate = useNavigate();
   return (
     <section
       id="home"
@@ -53,10 +55,16 @@ const Hero = () => {
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up delay-300">
-              <button className="bg-gradient-to-r from-blue-600 to-teal-600 text-white px-8 py-4 rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <button
+                onClick={() => navigate("/login")}
+                className="bg-gradient-to-r from-blue-600 to-teal-600 text-white px-8 py-4 rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
                 Start Exploring
               </button>
-              <button className="border-2 border-blue-300 text-blue-600 px-8 py-4 rounded-xl font-semibold bg-white hover:bg-blue-50 hover:border-blue-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <button
+                onClick={() => navigate("/login")}
+                className="border-2 border-blue-300 text-blue-600 px-8 py-4 rounded-xl font-semibold bg-white hover:bg-blue-50 hover:border-blue-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
                 Learn More
               </button>
             </div>

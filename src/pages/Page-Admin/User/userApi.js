@@ -1,15 +1,12 @@
 import axios from "axios";
+import { API_CONFIG } from "../../../config/api.js";
 
-const API_BASE_USER = "http://localhost:5100/api/users";
-const API_REGISTER_USER = "http://localhost:5100/api/auth/register";
-
-console.log(API_BASE_USER);
 export async function createUser(userData) {
   try {
-    const response = await axios.post(`${API_REGISTER_USER}`, userData, {
+    const response = await axios.post(API_CONFIG.AUTH.REGISTER, userData, {
       withCredentials: true,
       headers: {
-        "Content-Type": "multipart/form-data", // Important for file uploads
+        "Content-Type": "multipart/form-data",
       },
     });
     return response.data.data;
@@ -19,11 +16,10 @@ export async function createUser(userData) {
   }
 }
 
-// Update User
 export async function updateUserAPI(userId, updatedUser) {
   try {
     const response = await axios.put(
-      `${API_BASE_USER}/update/${userId}`,
+      API_CONFIG.USERS.UPDATE(userId),
       updatedUser,
       {
         withCredentials: true,
@@ -36,10 +32,9 @@ export async function updateUserAPI(userId, updatedUser) {
   }
 }
 
-// Delete User
 export async function deleteUserAPI(userId) {
   try {
-    const response = await axios.delete(`${API_BASE_USER}/delete/${userId}`, {
+    const response = await axios.delete(API_CONFIG.USERS.DELETE(userId), {
       withCredentials: true,
     });
     return response.data;
@@ -49,10 +44,9 @@ export async function deleteUserAPI(userId) {
   }
 }
 
-// Get All Users
 export async function getAllUsers() {
   try {
-    const response = await axios.get(`${API_BASE_USER}/all`, {
+    const response = await axios.get(API_CONFIG.USERS.GET_ALL, {
       withCredentials: true,
     });
     return response.data;

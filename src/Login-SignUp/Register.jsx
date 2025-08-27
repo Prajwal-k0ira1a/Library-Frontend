@@ -59,14 +59,10 @@ const Register = () => {
       const token = localStorage.getItem("token");
       const headers = token ? { Authorization: `Bearer ${token}` } : undefined; // backend currently requires token to register
 
-      const res = await axios.post(
-        "http://localhost:5100/api/auth/register",
-        data,
-        {
-          headers,
-          withCredentials: true,
-        }
-      );
+      const res = await axios.post(API_CONFIG.AUTH.REGISTER, data, {
+        headers,
+        withCredentials: true,
+      });
 
       if (res?.data?.status) {
         toast.success("Registration successful! Please login.", {
@@ -87,146 +83,209 @@ const Register = () => {
   };
 
   return (
-    <div className="w-full min-h-screen flex flex-col md:flex-row items-start">
-      {/* Left (Image) Section) */}
-      <div className="relative w-full md:w-1/2 h-64 md:h-full flex flex-col">
-        <div className="absolute top-[20%] left-[10%] flex flex-col z-10">
-          <h1 className="text-3xl md:text-4xl text-white font-bold my-4 drop-shadow-lg">
+    <div className="h-screen w-full flex flex-col lg:flex-row overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100">
+      {/* Left (Image) Section */}
+      <div className="relative lg:w-1/2 h-64 lg:h-screen overflow-hidden">
+        <div className="absolute inset-0 bg-black/30 z-10"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 text-center px-8">
+          <h1 className="text-4xl lg:text-5xl xl:text-6xl text-white font-bold mb-6 drop-shadow-2xl">
             Join the Library
           </h1>
-          <p className="text-lg md:text-xl text-white font-normal drop-shadow-lg">
-            Create an account to start borrowing books.
+          <p className="text-lg lg:text-xl xl:text-2xl text-white/90 font-medium drop-shadow-lg max-w-md mx-auto">
+            Create an account to start borrowing books and explore our vast
+            collection.
           </p>
         </div>
         <img
           src={COVER_IMG}
-          className="w-full h-full object-cover rounded-b-2xl md:rounded-none"
-          alt="cover"
+          className="w-full h-full object-cover"
+          alt="Library Management System"
         />
       </div>
 
       {/* Right (Form) Section */}
-      <div className="w-full md:w-1/2 h-full bg-[#f5f5f5] flex flex-col p-6 md:p-20 justify-center items-center">
-        <h1 className="w-full max-w-[520px] mx-auto text-lg md:text-xl text-[#060606] font-semibold ">
-          Create Account
-        </h1>
-        <form
-          onSubmit={handleSubmit}
-          className="w-full flex flex-col max-w-[520px]"
-        >
-          <div className="w-full flex flex-col mb-8 md:mb-10">
-            <h3 className="text-xl md:text-2xl font-semibold mb-4">Register</h3>
-            <p className="text-base mb-2">
-              Please fill in the details to continue
+      <div className="lg:w-1/2 flex items-center justify-center p-6 lg:p-12 xl:p-16">
+        <div className="w-full max-w-md lg:max-w-lg xl:max-w-xl">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-2">
+              Create Account
+            </h1>
+            <p className="text-gray-600 text-lg">
+              Join our library community today
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <input
-              name="name"
-              type="text"
-              className="w-full text-black py-2 bg-transparent border-b border-black outline-none focus:outline-none"
-              placeholder="Full name"
-              value={form.name}
-              onChange={handleChange}
-              required
-            />
-            <input
-              name="email"
-              type="email"
-              className="w-full text-black py-2 bg-transparent border-b border-black outline-none focus:outline-none"
-              placeholder="Email address"
-              value={form.email}
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-            <div className="relative">
-              <input
-                name="password"
-                type={showPassword ? "text" : "password"}
-                className="w-full text-black py-2 bg-transparent border-b border-black outline-none focus:outline-none pr-10"
-                placeholder="Password"
-                value={form.password}
-                onChange={handleChange}
-                required
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword((p) => !p)}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 hover:text-blue-600"
-                tabIndex={-1}
-              >
-                {showPassword ? (
-                  <EyeOff className="w-5 h-5" />
-                ) : (
-                  <Eye className="w-5 h-5" />
-                )}
-              </button>
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Name and Email Row */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label
+                  htmlFor="name"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Full Name
+                </label>
+                <input
+                  id="name"
+                  name="name"
+                  type="text"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white"
+                  placeholder="Enter your full name"
+                  value={form.name}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Email Address
+                </label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white"
+                  placeholder="Enter your email"
+                  value={form.email}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
             </div>
-            <input
-              name="confirmPassword"
-              type={showPassword ? "text" : "password"}
-              className="w-full text-black py-2 bg-transparent border-b border-black outline-none focus:outline-none"
-              placeholder="Confirm password"
-              value={form.confirmPassword}
-              onChange={handleChange}
-              required
-            />
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-            <span className="text-sm text-gray-700 py-2">Role: Borrower</span>
+            {/* Password and Confirm Password Row */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Password
+                </label>
+                <div className="relative">
+                  <input
+                    id="password"
+                    name="password"
+                    type={showPassword ? "text" : "password"}
+                    className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white"
+                    placeholder="Create a password"
+                    value={form.password}
+                    onChange={handleChange}
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((p) => !p)}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none transition-colors duration-200"
+                    tabIndex={-1}
+                  >
+                    {showPassword ? (
+                      <EyeOff className="w-5 h-5" />
+                    ) : (
+                      <Eye className="w-5 h-5" />
+                    )}
+                  </button>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <label
+                  htmlFor="confirmPassword"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Confirm Password
+                </label>
+                <input
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  type={showPassword ? "text" : "password"}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white"
+                  placeholder="Confirm your password"
+                  value={form.confirmPassword}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            </div>
 
-            <label className="flex items-center gap-3 py-2 cursor-pointer">
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleFileChange}
-                className="hidden"
-                id="profileImage"
-              />
-              <span className="inline-flex items-center gap-2 text-sm bg-white border border-black/20 rounded-md px-3 py-2">
-                <UploadCloud className="w-4 h-4" />
-                {profileImageFile
-                  ? profileImageFile.name
-                  : "Upload profile image (optional)"}
-              </span>
-            </label>
-          </div>
+            {/* Role and Profile Image Row */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700">
+                  Account Type
+                </label>
+                <div className="px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg">
+                  <span className="text-sm text-gray-700 font-medium">
+                    Borrower
+                  </span>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700">
+                  Profile Image
+                </label>
+                <label className="flex items-center justify-center w-full px-4 py-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors duration-200 bg-white">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                    className="hidden"
+                    id="profileImage"
+                  />
+                  <div className="flex items-center space-x-2">
+                    <UploadCloud className="w-5 h-5 text-gray-500" />
+                    <span className="text-sm text-gray-700">
+                      {profileImageFile
+                        ? profileImageFile.name
+                        : "Upload image (optional)"}
+                    </span>
+                  </div>
+                </label>
+              </div>
+            </div>
 
-          {error && <p className="text-red-500 text-sm mt-3">{error}</p>}
+            {/* Error Message */}
+            {error && (
+              <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+                <p className="text-sm text-red-600">{error}</p>
+              </div>
+            )}
 
-          <div className="w-full flex flex-col my-6">
+            {/* Submit Button */}
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full text-white my-2 font-semibold bg-[#060606] rounded-md p-4 text-center flex justify-center cursor-pointer disabled:opacity-60"
+              className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-200 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             >
               {isSubmitting ? "Creating account..." : "Create Account"}
             </button>
+
+            {/* Back to Login Button */}
             <button
               type="button"
-              className="w-full text-[#060606] my-2 font-semibold bg-white border-1 border-black rounded-md p-4 text-center flex justify-center cursor-pointer"
+              className="w-full bg-white hover:bg-gray-50 text-gray-700 font-semibold py-3 px-4 border border-gray-300 rounded-lg transition-all duration-200 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
               onClick={() => navigate("/login")}
             >
               Back to Login
             </button>
-          </div>
-        </form>
+          </form>
 
-        <div className="w-full flex items-center justify-center mt-2">
-          <p className="text-sm font-normal text-[#060606]">
-            Already have an account?
-            <span
-              className="font-semibold underline underline-offset-2 cursor-pointer ml-1"
-              onClick={() => navigate("/login")}
-            >
-              Login
-            </span>
-          </p>
+          {/* Footer */}
+          <div className="text-center mt-8">
+            <p className="text-sm text-gray-600">
+              Already have an account?{" "}
+              <button
+                onClick={() => navigate("/login")}
+                className="font-semibold text-blue-600 hover:text-blue-800 transition-colors duration-200"
+              >
+                Sign in here
+              </button>
+            </p>
+          </div>
         </div>
       </div>
     </div>

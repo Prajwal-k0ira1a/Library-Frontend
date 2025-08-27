@@ -1,27 +1,10 @@
 import axios from "axios";
-
-const API_BASE = "http://localhost:5100/api/borrow"; // Update base URL to match backend
-const API_BOOKS = "http://localhost:5100/api/books";
-const API_USERS = "http://localhost:5100/api/users";
-
-// Helper to get auth token
-const getAuthHeader = () => {
-  const token = localStorage.getItem("token");
-  if (!token) throw new Error("No authentication token found");
-
-  return {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    withCredentials: true,
-  };
-};
+import { API_CONFIG, getAuthHeader } from "../../config/api.js";
 
 export async function requestBorrow(bookId) {
   try {
     const response = await axios.post(
-      `${API_BASE}/request-borrow`, // Changed from /request-borrow to match backend route
+      API_CONFIG.BORROW.REQUEST,
       { bookId },
       getAuthHeader()
     );
@@ -45,8 +28,10 @@ export async function requestBorrow(bookId) {
 
 export async function getMyBorrows() {
   try {
-    const response = await axios.get(`${API_BASE}/my`, getAuthHeader());
-
+    const response = await axios.get(
+      API_CONFIG.BORROW.MY_BORROWS,
+      getAuthHeader()
+    );
     if (response.status !== 200) {
       throw new Error("Failed to fetch borrows");
     }
@@ -68,7 +53,7 @@ export async function getMyBorrows() {
 export async function requestBookReturn(borrowId) {
   try {
     const response = await axios.post(
-      `${API_BASE}/return/${borrowId}`, // Fixed return endpoint
+      API_CONFIG.BORROW.RETURN(borrowId),
       {},
       getAuthHeader()
     );
@@ -89,7 +74,10 @@ export async function requestBookReturn(borrowId) {
 // Librarian only endpoints
 export async function getPendingRequests() {
   try {
-    const response = await axios.get(`${API_BASE}/pending`, getAuthHeader());
+    const response = await axios.get(
+      API_CONFIG.BORROW.PENDING,
+      getAuthHeader()
+    );
     return response.data;
   } catch (error) {
     throw new Error(
@@ -101,7 +89,7 @@ export async function getPendingRequests() {
 export async function handleBorrowRequest(requestId, action) {
   try {
     const response = await axios.put(
-      `${API_BASE}/${requestId}`,
+      `${API_CONFIG.BORROW.BASE}/${requestId}`,
       { action }, // 'approve' or 'reject'
       getAuthHeader()
     );
@@ -116,7 +104,7 @@ export async function handleBorrowRequest(requestId, action) {
 export async function approveBookReturn(borrowId) {
   try {
     const response = await axios.put(
-      `${API_BASE}/approve-return/${borrowId}`,
+      API_CONFIG.BORROW.APPROVE_RETURN(borrowId),
       {},
       getAuthHeader()
     );
@@ -131,9 +119,7 @@ export async function approveBookReturn(borrowId) {
 // Update getAllAvailableBooks to use correct endpoint
 export async function getAllAvailableBooks() {
   try {
-    const response = await axios.get(
-      `${API_BOOKS}/getAll` // Removed authentication requirement for browsing books
-    );
+    const response = await axios.get(API_CONFIG.BOOKS.GET_ALL);
 
     if (response.status !== 200) {
       throw new Error("Failed to fetch books");
@@ -155,7 +141,7 @@ export async function getAllAvailableBooks() {
 
 export async function getCurrentUser() {
   try {
-    const res = await axios.get(`${API_USERS}/me`, getAuthHeader());
+    const res = await axios.get(API_CONFIG.USERS.GET_ME, getAuthHeader());
     console.log("[getCurrentUser] raw response:", res.data);
     return res.data; // NOTE: this returns { status, data, ... }
   } catch (error) {
@@ -167,5 +153,33 @@ export async function getCurrentUser() {
     throw new Error(
       error.response?.data?.message || "Failed to fetch user profile"
     );
+  }
+}
+
+// Update user profile
+export async function updateCurrentUser(data) {
+  try {
+    const res = await axios.put(API_CONFIG.USERS.UPDATE, data, getAuthHeader());
+    return res.data; // { status, data, ... }
+  } catch (error) {
+    console.error("[updateCurrentUser] error:", error.response?.data || error);
+    return {
+      status: false,
+      message: error.response?.data?.message || "Failed to update profile",
+    };
+  }
+}
+
+// Delete user account
+export async function deleteCurrentUser() {
+  try {
+    const res = await axios.delete(API_CONFIG.USERS.DELETE, getAuthHeader());
+    return res.data; // { status, message, ... }
+  } catch (error) {
+    console.error("[deleteCurrentUser] error:", error.response?.data || error);
+    return {
+      status: false,
+      message: error.response?.data?.message || "Failed to delete account",
+    };
   }
 }

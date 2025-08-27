@@ -42,6 +42,7 @@ const AddBookForm = ({ isVisible, onClose, onSave, editingBook }) => {
     quantity: "",
     available: "",
     genre: "Fiction",
+    description: "", // Added description field
   });
 
   const [imagePreview, setImagePreview] = useState(null);
@@ -66,6 +67,7 @@ const AddBookForm = ({ isVisible, onClose, onSave, editingBook }) => {
         quantity: editingBook.quantity || "",
         available: editingBook.available || "",
         genre: editingBook.genre || "Fiction",
+        description: editingBook.description || "", // Initialize description
       });
       setImagePreview(
         editingBook.bookImages?.[0] || editingBook.coverImage || null
@@ -79,6 +81,7 @@ const AddBookForm = ({ isVisible, onClose, onSave, editingBook }) => {
         quantity: "",
         available: "",
         genre: "Fiction",
+        description: "", // Reset description
       });
       setImagePreview(null);
       setFile(null);
@@ -116,6 +119,7 @@ const AddBookForm = ({ isVisible, onClose, onSave, editingBook }) => {
     if (parseInt(formData.available) > parseInt(formData.quantity)) {
       newErrors.available = "Cannot exceed quantity";
     }
+    if (!formData.description.trim()) newErrors.description = "Required";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -134,6 +138,7 @@ const AddBookForm = ({ isVisible, onClose, onSave, editingBook }) => {
       formDataObj.append("quantity", parseInt(formData.quantity, 10));
       formDataObj.append("available", parseInt(formData.available, 10));
       formDataObj.append("genre", formData.genre);
+      formDataObj.append("description", formData.description); // Append description
 
       if (file) {
         formDataObj.append("bookImages", file); // Backend expects this field name
@@ -281,6 +286,29 @@ const AddBookForm = ({ isVisible, onClose, onSave, editingBook }) => {
               </div>
             </div>
 
+            {/* Description */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Description
+              </label>
+              <textarea
+                value={formData.description}
+                onChange={(e) =>
+                  handleInputChange("description", e.target.value)
+                }
+                className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                  errors.description ? "border-red-300" : "border-gray-300"
+                }`}
+                rows="4"
+                placeholder="Enter book description"
+              />
+              {errors.description && (
+                <p className="text-red-500 text-xs mt-1">
+                  {errors.description}
+                </p>
+              )}
+            </div>
+
             {/* Quantity and Available */}
             <div className="grid grid-cols-2 gap-4">
               <div>
@@ -326,6 +354,29 @@ const AddBookForm = ({ isVisible, onClose, onSave, editingBook }) => {
                   </p>
                 )}
               </div>
+            </div>
+
+            {/* Description */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Description
+              </label>
+              <textarea
+                value={formData.description}
+                onChange={(e) =>
+                  handleInputChange("description", e.target.value)
+                }
+                className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                  errors.description ? "border-red-300" : "border-gray-300"
+                }`}
+                rows="4"
+                placeholder="Enter book description"
+              />
+              {errors.description && (
+                <p className="text-red-500 text-xs mt-1">
+                  {errors.description}
+                </p>
+              )}
             </div>
           </div>
         </div>
