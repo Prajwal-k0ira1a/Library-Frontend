@@ -143,16 +143,32 @@ export async function getCurrentUser() {
   try {
     const res = await axios.get(API_CONFIG.USERS.GET_ME, getAuthHeader());
     console.log("[getCurrentUser] raw response:", res.data);
-    return res.data; // NOTE: this returns { status, data, ... }
+
+    // Return the data in the expected format
+    if (res.data && res.data.status) {
+      return {
+        success: true,
+        data: res.data.data,
+        message: res.data.message,
+      };
+    } else {
+      return {
+        success: false,
+        error: "Invalid response format",
+        data: null,
+      };
+    }
   } catch (error) {
     console.error(
       "[getCurrentUser] error:",
       error.response?.status,
       error.response?.data || error
     );
-    throw new Error(
-      error.response?.data?.message || "Failed to fetch user profile"
-    );
+    return {
+      success: false,
+      error: error.response?.data?.message || "Failed to fetch user profile",
+      data: null,
+    };
   }
 }
 

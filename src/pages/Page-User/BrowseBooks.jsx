@@ -13,7 +13,7 @@ import {
   requestBorrow,
   getMyBorrows,
 } from "./borrowerApi";
-import BookDetailCard from "../Page-Admin/Book/BookDetailCard";
+import BookDetailCard from "./BookDetailCard.jsx";
 
 const BrowseBooks = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -191,8 +191,8 @@ const BrowseBooks = () => {
           </div>
         </div>
 
-        {/* Enhanced Books Grid with BookDetailCard */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
+        
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6 px-4 py-8">
           {filteredBooks.map((book) => (
             <BookDetailCard
               key={book._id}

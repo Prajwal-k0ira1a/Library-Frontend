@@ -34,7 +34,7 @@ const UserDashboard = () => {
     navigate("/login", { replace: true });
   };
 
- // ...existing code...
+  // ...existing code...
   const Navigation = () => {
     const tabs = [
       { key: "dashboard", icon: <BookOpen size={16} />, label: "Dashboard" },
@@ -55,7 +55,6 @@ const UserDashboard = () => {
         setActiveTab(tabs[idx].key);
       }
     };
-
 
     return (
       <nav
@@ -81,7 +80,7 @@ const UserDashboard = () => {
                   aria-current={activeTab === tab.key ? "page" : undefined}
                   aria-label={tab.label}
                   tabIndex={0}
-                  onKeyDown={e => handleKeyDown(e, idx)}
+                  onKeyDown={(e) => handleKeyDown(e, idx)}
                 >
                   {tab.icon}
                   <span>{tab.label}</span>
@@ -100,9 +99,6 @@ const UserDashboard = () => {
                       .join("")
                   : ""}
               </div>
-              <span className="text-gray-700 font-medium">
-                {userName ? `Welcome, ${userName}` : ""}
-              </span>
             </div>
             <button
               onClick={handleLogout}
@@ -114,9 +110,7 @@ const UserDashboard = () => {
         </div>
       </nav>
     );
-
   };
-
 
   const renderContent = () => {
     switch (activeTab) {
