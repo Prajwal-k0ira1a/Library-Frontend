@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 import { BookOpen, Search, RotateCcw, User, Bell } from "lucide-react";
 import Dashboard from "./Dashboard";
 import BrowseBooks from "./BrowseBooks";
@@ -18,8 +19,10 @@ const UserDashboard = () => {
       try {
         const result = await getCurrentUser();
         setUserName(result.data.name);
+        toast.success(`Welcome back, ${result.data.name}!`);
       } catch (error) {
         console.error("Failed to fetch user name:", error);
+        toast.error("Failed to load user information");
       }
     };
 
@@ -30,7 +33,10 @@ const UserDashboard = () => {
     try {
       localStorage.removeItem("token");
       localStorage.removeItem("user");
-    } catch {}
+      toast.success("Logged out successfully!");
+    } catch (error) {
+      toast.error("Error during logout");
+    }
     navigate("/login", { replace: true });
   };
 
@@ -71,7 +77,10 @@ const UserDashboard = () => {
               {tabs.map((tab, idx) => (
                 <button
                   key={tab.key}
-                  onClick={() => setActiveTab(tab.key)}
+                  onClick={() => {
+                    setActiveTab(tab.key);
+                    toast.info(`Switched to ${tab.label}`);
+                  }}
                   className={`flex items-center space-x-2 px-3 py-2 rounded-md transition-all duration-150 ${
                     activeTab === tab.key
                       ? "text-blue-600 bg-blue-100 shadow font-semibold scale-105"

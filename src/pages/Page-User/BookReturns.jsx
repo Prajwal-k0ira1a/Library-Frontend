@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { toast } from "react-toastify";
 import {
   Book,
   RefreshCw,
@@ -58,12 +59,15 @@ const BookReturns = () => {
       const res = await requestBookReturn(borrowId);
       if (res.success) {
         setBorrowedBooks((prev) => prev.filter((b) => b._id !== borrowId));
+        toast.success("Book returned successfully!");
         // Optionally append to history after approval; for now, keep it simple
       } else {
         console.error("Failed to return book:", res.error);
+        toast.error("Failed to return book: " + res.error);
       }
     } catch (err) {
       console.error("Failed to return book:", err);
+      toast.error("Failed to return book: " + err);
     }
   };
 
@@ -73,6 +77,7 @@ const BookReturns = () => {
       if (!bookId) return;
       const res = await requestBorrow(bookId);
       if (res.success) {
+        toast.success("Book requested successfully!");
         // Refresh lists
         const reload = await getMyBorrows();
         if (reload.success) {
@@ -86,9 +91,11 @@ const BookReturns = () => {
         }
       } else {
         console.error("Failed to re-request book:", res.error);
+        toast.error("Failed to re-request book: " + res.error);
       }
     } catch (err) {
       console.error("Failed to re-request book:", err);
+      toast.error("Failed to re-request book: " + err);
     }
   };
 

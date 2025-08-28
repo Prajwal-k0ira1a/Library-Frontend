@@ -179,7 +179,14 @@ const Profile = () => {
                     </div>
                   </div>
                   <button
-                    onClick={() => setEmailNotifications(!emailNotifications)}
+                    onClick={() => {
+                      setEmailNotifications(!emailNotifications);
+                      toast.success(
+                        `Email notifications ${
+                          !emailNotifications ? "enabled" : "disabled"
+                        }`
+                      );
+                    }}
                     className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors ${
                       emailNotifications ? "bg-blue-600" : "bg-gray-300"
                     }`}
@@ -203,7 +210,14 @@ const Profile = () => {
                     </div>
                   </div>
                   <button
-                    onClick={() => setSmsReminders(!smsReminders)}
+                    onClick={() => {
+                      setSmsReminders(!smsReminders);
+                      toast.success(
+                        `SMS reminders ${
+                          !smsReminders ? "enabled" : "disabled"
+                        }`
+                      );
+                    }}
                     className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors ${
                       smsReminders ? "bg-green-600" : "bg-gray-300"
                     }`}

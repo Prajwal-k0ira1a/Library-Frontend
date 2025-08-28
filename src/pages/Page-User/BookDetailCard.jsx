@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { toast } from "react-toastify";
 import {
   BookOpen,
   User,
@@ -323,8 +324,24 @@ const BookDetailCard = ({
       setIsLoading(true);
       try {
         await onBorrow(book._id);
+        toast.success(`Successfully borrowed "${book.title}"!`, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
       } catch (error) {
         console.error("Borrow error:", error);
+        toast.error(`Failed to borrow "${book.title}". Please try again.`, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
       } finally {
         setIsLoading(false);
       }
