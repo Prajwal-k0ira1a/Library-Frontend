@@ -1,7 +1,8 @@
 import React from 'react'
 
 const Unauthorized = () => {
-  return (
+
+    return (
     <div className="py-10 bg-white font-serif">
       <section className="flex justify-center items-center">
         <div className="w-full max-w-4xl px-4">
@@ -26,6 +27,7 @@ const Unauthorized = () => {
               <a
                 href="/"
                 className="inline-block px-5 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
+            
               >
                 Go to Home
               </a>
