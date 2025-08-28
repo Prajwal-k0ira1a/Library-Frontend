@@ -64,6 +64,7 @@ console.log(API_CONFIG.AUTH.LOGIN);
         });
         navigate("/user");
       } else {
+        navigate("/unauthorized");
         setError("Invalid user role");
       }
     } catch (error) {

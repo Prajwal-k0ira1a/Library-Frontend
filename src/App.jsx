@@ -8,6 +8,7 @@ import LibraryDashboard from "./pages/Page-Admin/LibraryDashboard";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ProtectedRoute from "./protected/ProtectedRoute";
+import Unauthorized from "./Login-SignUp/Unauthorized";
 function App() {
   return (
     <>
@@ -15,6 +16,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/unauthorized" element={ <Unauthorized/>}/>
         <Route path="/admin/*" element={<ProtectedRoute allowedRoles={["librarian"]}><LibraryDashboard /></ProtectedRoute>} />
         <Route path="/user/*" element={<ProtectedRoute allowedRoles={["borrower"]}><UserDashboard /></ProtectedRoute>} />
       </Routes>
