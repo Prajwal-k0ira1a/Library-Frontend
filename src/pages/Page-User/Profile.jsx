@@ -12,10 +12,10 @@ const Profile = () => {
   const fetchUserData = async () => {
     try {
       const result = await getCurrentUser();
-      if (result.status) {
+      if (result.success) {
         setUserData(result.data);
       } else {
-        toast.error(result.message || "Failed to fetch user profile");
+        toast.error(result.error || "Failed to fetch user profile");
       }
     } catch (err) {
       console.error("Failed to fetch user profile:", err);

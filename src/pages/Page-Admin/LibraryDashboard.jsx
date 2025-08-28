@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Navigation from "./Navigation.jsx";
 import DashboardHome from "./HomeDashboard.jsx";
 import UsersManagement from "./UsersManagement.jsx";
 import BorrowedBooks from "./BorrowedBooks.jsx";
 import BooksManagement from "./BooksManagement.jsx";
-import SettingsPanel from "./SettingsPanel.jsx";
 import { useNavigate } from "react-router-dom";
 import { LogOut, User, Shield, Activity } from "lucide-react";
 
@@ -40,8 +39,6 @@ const LibraryDashboard = () => {
         return <BooksManagement />;
       case "borrowed":
         return <BorrowedBooks />;
-      case "settings":
-        return <SettingsPanel />;
       default:
         return <DashboardHome />;
     }

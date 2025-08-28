@@ -272,7 +272,8 @@ const Dashboard = () => {
                     >
                       <div className="flex items-start space-x-4">
                         <div className="w-16 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center text-white text-xs font-semibold shadow-lg">
-                          {book.cover || "BOOK"}
+                          {/* {book.bookImages || "BOOK"} */}
+                        <img src="{book.bookImages && book.bookImages.length > 0 ? book.bookImages[0] : ''}" alt={book.title} className="w-full h-full object-cover rounded-lg" />
                         </div>
                         <div className="flex-1">
                           <h4 className="font-bold text-lg text-gray-900 mb-1">

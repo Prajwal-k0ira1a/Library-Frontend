@@ -142,7 +142,7 @@ export async function getAllAvailableBooks() {
 export async function getCurrentUser() {
   try {
     const res = await axios.get(API_CONFIG.USERS.GET_ME, getAuthHeader());
-    console.log("[getCurrentUser] raw response:", res.data);
+    // console.log("[getCurrentUser] raw response:", res.data);
 
     // Return the data in the expected format
     if (res.data && res.data.status) {

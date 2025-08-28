@@ -300,6 +300,23 @@ const BookDetailCard = ({
   const [showFullDescription, setShowFullDescription] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showDetailedView, setShowDetailedView] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const nextImage = () => {
+    if (book.bookImages && book.bookImages.length > 1) {
+      setCurrentImageIndex((prev) =>
+        prev === book.bookImages.length - 1 ? 0 : prev + 1
+      );
+    }
+  };
+
+  const prevImage = () => {
+    if (book.bookImages && book.bookImages.length > 1) {
+      setCurrentImageIndex((prev) =>
+        prev === 0 ? book.bookImages.length - 1 : prev - 1
+      );
+    }
+  };
 
   const handleBorrow = async () => {
     if (onBorrow) {
@@ -346,13 +363,13 @@ const BookDetailCard = ({
   if (showSimplifiedView) {
     return (
       <>
-        <div className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:scale-[1.01]">
+        <div className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:scale-[1.05]">
           {/* Book Cover */}
           <div className="relative">
-            <div className="h-40 bg-gradient-to-br from-blue-500 via-purple-500 to-indigo-600 relative overflow-hidden">
+            <div className="w-100h-100 bg-gradient-to-br from-blue-500 via-purple-500 to-indigo-600 relative overflow-hidden">
               {book.bookImages && book.bookImages.length > 0 ? (
                 <img
-                  src={book.bookImages[0]}
+                  src={book.bookImages[currentImageIndex]}
                   alt={book.title}
                   className="w-full h-full object-cover"
                 />
@@ -362,6 +379,37 @@ const BookDetailCard = ({
                 </div>
               )}
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+
+              {book.bookImages && book.bookImages.length > 1 && (
+                <>
+                  <button
+                    onClick={prevImage}
+                    className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white text-gray-800 p-2 rounded-full shadow-lg transition-all duration-300 hover:scale-110"
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={nextImage}
+                    className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white text-gray-800 p-2 rounded-full shadow-lg transition-all duration-300 hover:scale-110"
+                  >
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+
+                  <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 flex space-x-2">
+                    {book.bookImages.map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setCurrentImageIndex(index)}
+                        className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
+                          index === currentImageIndex
+                            ? "bg-white shadow-lg scale-125"
+                            : "bg-white/50 hover:bg-white/75 hover:scale-110"
+                        }`}
+                      />
+                    ))}
+                  </div>
+                </>
+              )}
 
               {/* Availability Badge */}
               <div className="absolute top-3 right-3">
@@ -404,6 +452,13 @@ const BookDetailCard = ({
                     <span className="text-green-700 font-medium text-xs">
                       Already Borrowed
                     </span>
+                    <button
+                      onClick={() => setShowDetailedView(true)}
+                      className="flex items-center justify-center space-x-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-1 px-2 rounded-md font-medium transition-all duration-300 text-xs"
+                    >
+                      <ExternalLink className="w-3 h-3" />
+                      <span>Details</span>
+                    </button>
                   </div>
                 ) : (
                   <>
@@ -461,7 +516,7 @@ const BookDetailCard = ({
           <div className="h-60 bg-gradient-to-br from-blue-500 via-purple-500 to-indigo-600 relative overflow-hidden">
             {book.bookImages && book.bookImages.length > 0 ? (
               <img
-                src={book.bookImages[0]}
+                src={book.bookImages[currentImageIndex]}
                 alt={book.title}
                 className="w-full h-full object-cover"
               />
@@ -471,6 +526,37 @@ const BookDetailCard = ({
               </div>
             )}
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+
+            {book.bookImages && book.bookImages.length > 1 && (
+              <>
+                <button
+                  onClick={prevImage}
+                  className="absolute left-3 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white text-gray-800 p-2 rounded-full shadow-lg transition-all duration-300 hover:scale-110"
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
+                <button
+                  onClick={nextImage}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white text-gray-800 p-2 rounded-full shadow-lg transition-all duration-300 hover:scale-110"
+                >
+                  <ChevronRight className="w-5 h-5" />
+                </button>
+
+                <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+                  {book.bookImages.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentImageIndex(index)}
+                      className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                        index === currentImageIndex
+                          ? "bg-white shadow-lg scale-125"
+                          : "bg-white/50 hover:bg-white/75 hover:scale-110"
+                      }`}
+                    />
+                  ))}
+                </div>
+              </>
+            )}
 
             {/* Availability Badge */}
             <div className="absolute top-4 right-4">
@@ -499,7 +585,7 @@ const BookDetailCard = ({
           {/* Quick Info Grid */}
           <div className="grid grid-cols-2 gap-4">
             <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-xl">
-              <Hash className="w-5 h-5 text-blue-600" />
+              <Hash className="w-6 h-5 text-blue-600" />
               <div>
                 <p className="text-xs text-gray-500 font-medium">ISBN</p>
                 <p className="text-sm font-semibold text-gray-900 font-mono">
@@ -620,6 +706,13 @@ const BookDetailCard = ({
                     <span className="text-green-700 font-medium">
                       Already Borrowed
                     </span>
+                    <button
+                      onClick={() => setShowDetailedView(true)}
+                      className="flex items-center justify-center space-x-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-1.5 px-2 rounded-md font-medium transition-all duration-300 text-xs"
+                    >
+                      <ExternalLink className="w-3 h-3" />
+                      <span>Details</span>
+                    </button>
                   </div>
 
                   <button
