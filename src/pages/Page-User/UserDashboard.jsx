@@ -70,7 +70,7 @@ const UserDashboard = () => {
       >
         <div className="flex items-center justify-between w-full">
           <h1 className="text-2xl font-bold text-blue-600 italic">
-            Library Portal
+            Library Hub
           </h1>
           <div className="flex-1 flex justify-center">
             <div className="flex items-stretch space-x-6">

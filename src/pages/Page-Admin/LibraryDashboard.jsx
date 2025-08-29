@@ -68,9 +68,7 @@ const LibraryDashboard = () => {
                 <Shield className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h2 className="text-xl font-bold text-gray-900">
-                  Library Management System
-                </h2>
+                <h2 className="text-xl font-bold text-gray-900">Library Hub</h2>
                 <p className="text-sm text-gray-500">
                   Administrative Dashboard
                 </p>
