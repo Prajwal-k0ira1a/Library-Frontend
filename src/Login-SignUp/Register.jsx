@@ -4,7 +4,7 @@ import COVER_IMG from "../assets/image.jpg";
 import { Eye, EyeOff, UploadCloud } from "lucide-react";
 import axios from "axios";
 import { toast } from "react-toastify";
-
+import { API_CONFIG } from "../config/api.js";
 const Register = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
@@ -74,6 +74,7 @@ const Register = () => {
         setError(res?.data?.message || "Registration failed");
       }
     } catch (err) {
+      console.log(err);
       const msg = err.response?.data?.message || "Registration failed";
       setError(msg);
       toast.error(msg, { position: "top-right", autoClose: 2500 });
