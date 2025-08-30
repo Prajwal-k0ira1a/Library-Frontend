@@ -8,6 +8,7 @@ import {
   Award,
   Activity,
   RefreshCw,
+  BookOpen,
 } from "lucide-react";
 import { getCurrentUser, getMyBorrows } from "./borrowerApi";
 
@@ -271,9 +272,12 @@ const Dashboard = () => {
                       className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl p-6 border border-gray-200 hover:shadow-lg transition-all duration-300"
                     >
                       <div className="flex items-start space-x-4">
-                        <div className="w-16 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center text-white text-xs font-semibold shadow-lg">
-                          {/* {book.bookImages || "BOOK"} */}
-                        <img src="{book.bookImages && book.bookImages.length > 0 ? book.bookImages[0] : ''}" alt={book.title} className="w-full h-full object-cover rounded-lg" />
+                        <div className="w-16 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg overflow-hidden flex items-center justify-center text-white text-xs font-semibold shadow-lg">
+                          {book.bookImage ? (
+                            <img src={book.bookImage} alt={book.title} className="w-full h-full object-cover" />
+                          ) : (
+                            <BookOpen className="w-6 h-6 text-white/70" />
+                          )}
                         </div>
                         <div className="flex-1">
                           <h4 className="font-bold text-lg text-gray-900 mb-1">

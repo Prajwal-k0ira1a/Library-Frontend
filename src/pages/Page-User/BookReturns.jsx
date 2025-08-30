@@ -12,6 +12,7 @@ import {
   ArrowRight,
   History,
   FileText,
+  BookOpen,
 } from "lucide-react";
 import { getMyBorrows, requestBookReturn, requestBorrow } from "./borrowerApi";
 
@@ -243,8 +244,14 @@ const BookReturns = () => {
                       >
                         <div className="flex items-center space-x-6">
                           <div className="relative">
-                            <div className="w-20 h-24 bg-gradient-to-br from-blue-500 via-purple-500 to-indigo-600 rounded-xl flex items-center justify-center text-white text-lg font-bold shadow-lg">
-                              {book.cover || "📚"}
+                            <div className="w-20 h-24 bg-gradient-to-br from-blue-500 via-purple-500 to-indigo-600 rounded-xl overflow-hidden flex items-center justify-center">
+                              {book.bookImage ? (
+                                <img src={book.bookImage} alt={book.title} className="w-full h-full object-cover" />
+                              ) : book.cover ? (
+                                <span className="text-white text-lg font-bold">{book.cover}</span>
+                              ) : (
+                                <BookOpen className="w-8 h-8 text-white/70" />
+                              )}
                             </div>
                             <div className="absolute -top-2 -right-2 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
                               <Book className="w-3 h-3 text-white" />
@@ -355,8 +362,14 @@ const BookReturns = () => {
                       >
                         <div className="flex items-center space-x-6">
                           <div className="relative">
-                            <div className="w-20 h-24 bg-gradient-to-br from-green-500 via-emerald-500 to-teal-600 rounded-xl flex items-center justify-center text-white text-lg font-bold shadow-lg">
-                              {book.cover || "📚"}
+                            <div className="w-20 h-24 bg-gradient-to-br from-green-500 via-emerald-500 to-teal-600 rounded-xl overflow-hidden flex items-center justify-center">
+                              {book.bookImage ? (
+                                <img src={book.bookImage} alt={book.title} className="w-full h-full object-cover" />
+                              ) : book.cover ? (
+                                <span className="text-white text-lg font-bold">{book.cover}</span>
+                              ) : (
+                                <BookOpen className="w-8 h-8 text-white/70" />
+                              )}
                             </div>
                             <div className="absolute -top-2 -right-2 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
                               <CheckCircle className="w-3 h-3 text-white" />
