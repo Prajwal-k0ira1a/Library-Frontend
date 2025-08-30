@@ -61,9 +61,7 @@ const Register = () => {
 
       const res = await axios.post(API_CONFIG.AUTH.REGISTER, data, {
        withCredentials: true,
-        headers: {
-        "Content-Type": "multipart/form-data",
-      },
+       
       });
 
       if (res?.data?.status) {
