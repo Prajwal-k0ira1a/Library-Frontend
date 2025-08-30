@@ -70,7 +70,7 @@ const AddBookForm = ({ isVisible, onClose, onSave, editingBook }) => {
         description: editingBook.description || "", // Initialize description
       });
       setImagePreview(
-        editingBook.bookImages?.[0] || editingBook.coverImage || null
+        editingBook.bookImage || editingBook.coverImage || null
       );
     } else if (isVisible) {
       // Reset form for new book
@@ -141,7 +141,7 @@ const AddBookForm = ({ isVisible, onClose, onSave, editingBook }) => {
       formDataObj.append("description", formData.description); // Append description
 
       if (file) {
-        formDataObj.append("bookImages", file); // Backend expects this field name
+        formDataObj.append("bookImage", file); // Backend expects this field name
       }
 
       let result;
@@ -611,9 +611,9 @@ const LibraryBooksLayout = () => {
                   className="group bg-white rounded-xl border border-gray-200 overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
                 >
                   <div className="aspect-[3/4] bg-gray-100 relative overflow-hidden">
-                    {book.bookImages?.[0] || book.coverImage ? (
+                    {book.bookImage || book.coverImage ? (
                       <img
-                        src={book.bookImages?.[0] || book.coverImage}
+                        src={book.bookImage || book.coverImage}
                         alt={book.title || book.name}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
                       />
@@ -697,9 +697,9 @@ const LibraryBooksLayout = () => {
                   <div className="flex items-center space-x-4">
                     {/* Book Image */}
                     <div className="w-16 h-20 bg-gray-100 rounded-md overflow-hidden flex-shrink-0">
-                      {book.bookImages?.[0] || book.coverImage ? (
+                      {book.bookImage || book.coverImage ? (
                         <img
-                          src={book.bookImages?.[0] || book.coverImage}
+                          src={book.bookImage|| book.coverImage}
                           alt={book.title || book.name}
                           className="w-full h-full object-cover"
                         />

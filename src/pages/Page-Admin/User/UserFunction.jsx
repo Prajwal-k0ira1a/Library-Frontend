@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Plus, Edit, Trash2, Save, X, Users, Search } from "lucide-react";
+import { Plus, Edit, Trash2, Save, X, Users, Search, Eye, EyeOff } from "lucide-react";
+import { toast } from "react-toastify";
 import {
   createUser,
   updateUserAPI,
@@ -13,6 +14,7 @@ const UserDashboard = () => {
   const [editingUser, setEditingUser] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -66,21 +68,38 @@ const UserDashboard = () => {
 
   const handleUpdateUser = async (userId, updatedData) => {
     try {
-      const res = await updateUserAPI(userId, updatedData);
+      // Create a new object without empty password if it exists
+      const dataToUpdate = { ...updatedData };
+      
+      // If password is empty, remove it from the update data
+      if (!dataToUpdate.password || dataToUpdate.password.trim() === '') {
+        delete dataToUpdate.password;
+      }
 
-      // backend gives you: { message, data: { updated user } }
-      const updatedUser = res.data;
+      // Create FormData for the update
+      const formData = new FormData();
+      Object.entries(dataToUpdate).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          formData.append(key, value);
+        }
+      });
 
-      // update state (replace the old user with the new one)
-      setUsers((prevUsers) =>
-        prevUsers.map((user) =>
-          user._id === updatedUser._id ? updatedUser : user
-        )
-      );
+      const res = await updateUserAPI(userId, formData);
 
-      console.log(res.message); // "User updated successfully"
+      // Update state with the new user data
+      if (res && res.data) {
+        setUsers((prevUsers) =>
+          prevUsers.map((user) =>
+            user._id === res.data._id ? res.data : user
+          )
+        );
+        return { success: true, message: 'User updated successfully' };
+      }
+      
+      return { success: false, message: 'Failed to update user' };
     } catch (error) {
       console.error("Error updating user:", error);
+      throw error;
     }
   };
 
@@ -102,16 +121,25 @@ const UserDashboard = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      setLoading(true);
       if (editingUser) {
-        await handleUpdateUser(editingUser._id, formData);
+        const result = await handleUpdateUser(editingUser._id, formData);
+        if (result && result.success) {
+          toast.success(result.message || 'User updated successfully');
+        } else {
+          toast.error(result?.message || 'Failed to update user');
+          return;
+        }
       } else {
         await addUser(formData);
       }
       handleCloseModal();
-      // Optionally refresh the users list
       await getAlltheUsers();
     } catch (error) {
-      alert("Error saving user. Please try again.");
+      console.error('Error in handleSubmit:', error);
+      toast.error(error.response?.data?.message || 'Error saving user. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -361,16 +389,30 @@ const UserDashboard = () => {
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Password {editingUser && "(leave blank to keep current)"}
                   </label>
-                  <input
-                    type={"password"}
-                    required={!editingUser}
-                    minLength="10"
-                    value={formData.password}
-                    onChange={(e) =>
-                      setFormData({ ...formData, password: e.target.value })
-                    }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
+                  <div className="relative">
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      required={!editingUser}
+                      minLength="10"
+                      value={formData.password}
+                      onChange={(e) =>
+                        setFormData({ ...formData, password: e.target.value })
+                      }
+                      className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                      tabIndex={-1}
+                    >
+                      {showPassword ? (
+                        <EyeOff className="w-5 h-5" />
+                      ) : (
+                        <Eye className="w-5 h-5" />
+                      )}
+                    </button>
+                  </div>
                 </div>
 
                 <div>
