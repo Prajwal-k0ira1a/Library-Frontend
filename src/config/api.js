@@ -1,5 +1,5 @@
 // API Configuration
-const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5100";
 
 export const API_CONFIG = {
     BASE_URL,
@@ -30,7 +30,6 @@ export const API_CONFIG = {
       PENDING_RETURNS: `${import.meta.env.VITE_API_BORROW_URL}/pending-returns`,
       ALL: `${import.meta.env.VITE_API_BORROW_URL}/all`,
       APPROVE_RETURN: (id) => `${import.meta.env.VITE_API_BORROW_URL}/approve-return/${id}`,
-      APPROVE_REQUEST: (id) => `${import.meta.env.VITE_API_BORROW_URL}/approve-request/${id}`,
     },
   };
   // 

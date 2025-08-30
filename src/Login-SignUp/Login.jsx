@@ -107,10 +107,10 @@ console.log(API_CONFIG.AUTH.LOGIN);
         <div className="absolute inset-0 bg-black/30 z-10"></div>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 text-center px-8">
           <h1 className="text-4xl lg:text-5xl xl:text-6xl text-white font-bold mb-6 drop-shadow-2xl">
-            User Management
+        Library  Management
           </h1>
           <p className="text-lg lg:text-xl xl:text-2xl text-white/90 font-medium drop-shadow-lg max-w-md mx-auto">
-            Manage your users efficiently and securely with our comprehensive
+            Manage your users and books efficiently and securely with our comprehensive
             library system.
           </p>
         </div>
