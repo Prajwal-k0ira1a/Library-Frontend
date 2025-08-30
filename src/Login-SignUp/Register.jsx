@@ -60,8 +60,10 @@ const Register = () => {
       const headers = token ? { Authorization: `Bearer ${token}` } : undefined; // backend currently requires token to register
 
       const res = await axios.post(API_CONFIG.AUTH.REGISTER, data, {
-        headers,
-        withCredentials: true,
+       withCredentials: true,
+        headers: {
+        "Content-Type": "multipart/form-data",
+      },
       });
 
       if (res?.data?.status) {
