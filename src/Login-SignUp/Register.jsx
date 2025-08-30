@@ -2,9 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import COVER_IMG from "../assets/image.jpg";
 import { Eye, EyeOff, UploadCloud } from "lucide-react";
-import axios from "axios";
 import { toast } from "react-toastify";
-import { API_CONFIG } from "../config/api.js";
+import { createUser } from "../pages/Page-Admin/User/userApi.js";
 const Register = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
@@ -56,22 +55,16 @@ const Register = () => {
       data.append("role", "borrower");
       if (profileImageFile) data.append("profileImage", profileImageFile);
 
-      const token = localStorage.getItem("token");
-      const headers = token ? { Authorization: `Bearer ${token}` } : undefined; // backend currently requires token to register
+      const userData = await createUser(data);
 
-      const res = await axios.post(API_CONFIG.AUTH.REGISTER, data, {
-       withCredentials: true,
-       
-      });
-
-      if (res?.data?.status) {
+      if (userData) {
         toast.success("Registration successful! Please login.", {
           position: "top-right",
           autoClose: 2000,
         });
         navigate("/login");
       } else {
-        setError(res?.data?.message || "Registration failed");
+        setError("Registration failed");
       }
     } catch (err) {
       console.log(err);
