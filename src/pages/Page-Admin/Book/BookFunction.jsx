@@ -14,11 +14,29 @@ import { createBook, updateBook, deleteBook, getAllBooks } from "./bookApi";
 
 const genres = [
   "All Genres",
-  "Fiction",
-  "Classic",
-  "Dystopian",
-  "Romance",
-  "Science Fiction",
+"Fiction",
+"Classic",
+"Dystopian",
+"Romance",
+"Science Fiction",
+"Fantasy",
+"Mystery",
+"Thriller",
+"Historical Fiction",
+"Horror",
+"Young Adult",
+"Children’s Books",
+"Graphic Novels",
+"Poetry",
+"Non-Fiction",
+"Biography/Memoir",
+"Self-Help",
+"History",
+"Science & Nature",
+"True Crime",
+"Philosophy",
+"Travel",
+"Business & Economics"
 ];
 
 // Modal component
